@@ -224,9 +224,9 @@ abide by its terms.
 
 <!-- Definitions -->
 
-[build-badge]: https://img.shields.io/travis/micromark/micromark-extension-directive.svg
+[build-badge]: https://github.com/micromark/micromark-extension-directive/workflows/main/badge.svg
 
-[build]: https://travis-ci.org/micromark/micromark-extension-directive
+[build]: https://github.com/micromark/micromark-extension-directive/actions
 
 [coverage-badge]: https://img.shields.io/codecov/c/github/micromark/micromark-extension-directive.svg
 
