@@ -1020,6 +1020,30 @@ test('micromark-extension-directive (syntax)', function (t) {
       'should support a thematic break before a container'
     )
 
+    t.equal(
+      micromark(' :::x\n ', options({'*': h})),
+      '<x></x>',
+      'should support prefixed containers (1)'
+    )
+
+    t.equal(
+      micromark(' :::x\n - a', options({'*': h})),
+      '<x>\n<ul>\n<li>a</li>\n</ul>\n</x>',
+      'should support prefixed containers (2)'
+    )
+
+    t.equal(
+      micromark(' :::x\n - a\n > b', options({'*': h})),
+      '<x>\n<ul>\n<li>a</li>\n</ul>\n<blockquote>\n<p>b</p>\n</blockquote>\n</x>',
+      'should support prefixed containers (3)'
+    )
+
+    t.equal(
+      micromark(' :::x\n - a\n > b\n :::', options({'*': h})),
+      '<x>\n<ul>\n<li>a</li>\n</ul>\n<blockquote>\n<p>b</p>\n</blockquote>\n</x>',
+      'should support prefixed containers (4)'
+    )
+
     t.end()
   })
 
