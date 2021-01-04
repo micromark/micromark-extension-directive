@@ -1262,6 +1262,24 @@ test('content', function (t) {
     'should support text directives in container directives'
   )
 
+  t.equal(
+    micromark(':::section\n* a\n:::', options({'*': h})),
+    '<section>\n<ul>\n<li>a</li>\n</ul>\n</section>',
+    'should support lists in container directives'
+  )
+
+  t.equal(
+    micromark(':::section[]\n* a\n:::', options({'*': h})),
+    '<section>\n<ul>\n<li>a</li>\n</ul>\n</section>',
+    'should support lists w/ label brackets in container directives'
+  )
+
+  t.equal(
+    micromark(':::section{}\n* a\n:::', options({'*': h})),
+    '<section>\n<ul>\n<li>a</li>\n</ul>\n</section>',
+    'should support lists w/ attribute braces in container directives'
+  )
+
   t.end()
 })
 
