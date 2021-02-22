@@ -188,8 +188,6 @@ this implementation mimics CommonMark as closely as possible:
     label (~~`:a []`~~), name and attributes (~~`:a {}`~~), or label and
     attributes (~~`:a[] {}`~~) — because it’s not allowed in links either
     (~~`[] ()`~~)
-*   Only escaped brackets are allow in the label (~~`:a[b[c]d]`~~) — because
-    links in links are not allowed either
 *   No trailing colons allowed on the opening fence of a container
     (~~`:::a:::`~~) — because it’s not allowed in fenced code either
 *   The label and attributes in a leaf or container cannot include line endings

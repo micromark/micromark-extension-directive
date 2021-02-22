@@ -115,6 +115,12 @@ test('micromark-extension-directive (syntax)', function (t) {
     )
 
     t.equal(
+      micromark('a :b[c :d[e] f] g', options()),
+      '<p>a  g</p>',
+      'should support a directive in an label'
+    )
+
+    t.equal(
       micromark(':a[]asd', options()),
       '<p>asd</p>',
       'should support content after a label'
@@ -1120,6 +1126,12 @@ test('micromark-extension-directive (compile)', function (t) {
     'should support fall through directives (`*`)'
   )
 
+  t.equal(
+    micromark(':a[:img{src="x" alt=y}]{href="z"}', options({'*': h})),
+    '<p><a href="z"><img src="x" alt="y"></a></p>',
+    'should support fall through directives (`*`)'
+  )
+
   t.end()
 })
 
@@ -1134,6 +1146,24 @@ test('content', function (t) {
     micromark(':abbr[x\\[y\\]z]', options({abbr: abbr})),
     '<p><abbr>x[y]z</abbr></p>',
     'should support escaped brackets in a label'
+  )
+
+  t.equal(
+    micromark(':abbr[x[y]z]', options({abbr: abbr})),
+    '<p><abbr>x[y]z</abbr></p>',
+    'should support balanced brackets in a label'
+  )
+
+  t.equal(
+    micromark(':abbr[a[b[c[d]e]f]g]h', options({abbr: abbr})),
+    '<p><abbr>a[b[c[d]e]f]g</abbr>h</p>',
+    'should support balanced brackets in a label, three levels deep'
+  )
+
+  t.equal(
+    micromark(':abbr[a[b[c[d[e]f]g]h]i]j', options({abbr: abbr})),
+    '<p><abbr></abbr>[a[b[c[d[e]f]g]h]i]j</p>',
+    'should *not* support balanced brackets in a label, four levels deep'
   )
 
   t.equal(
