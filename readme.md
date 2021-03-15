@@ -148,11 +148,11 @@ He dies.
 The `name` part is required.  The first character must be a letter, other
 characters can be alphanumerical and `-`.
 
-The `[label]` part is optional (`:x` and `:x[]` are equivalent).
+The `[label]` part is optional (`:x` and `:x[]` are equivalent)†.
 When used, it can include text constructs such as emphasis and so on: `x[a *b*
 c]`.
 
-The `{attributes}` part is optional (`:x` and `:x{}` are equivalent).
+The `{attributes}` part is optional (`:x` and `:x{}` are equivalent)†.
 When used, it is handled like HTML attributes, such as that `{a}`, `{a=""}`,
 , `{a=''}` but also `{a=b}`, `{a="b"}`, and `{a='b'}` are equivalent.
 Shortcuts are available for `id=` (`{#readme}` for `{id=readme}`) and
@@ -160,6 +160,11 @@ Shortcuts are available for `id=` (`{#readme}` for `{id=readme}`) and
 When multiple ids are found, the last is used; when multiple classes are found,
 they are combined: `{.red class=green .blue}` is equivalent to
 `{.red .green .blue}` and `{class="red green blue"}`.
+
+† there is one case where a name must be followed by an empty label or empty
+attributes: a *text* directive that only has a name, cannot be followed by a
+colon. So, `:red:` doesn’t work. Use either `:red[]` or `:red{}` instead.
+The reason for this is to allow GitHub emoji (gemoji) and directives to coexist.
 
 Containers can be nested by using more colons outside:
 
