@@ -61,6 +61,12 @@ test('micromark-extension-directive (syntax)', function (t) {
     )
 
     t.equal(
+      micromark(':a:', options()),
+      '<p>:a:</p>',
+      'should *not* support a colon right after a name'
+    )
+
+    t.equal(
       micromark(':a[', options()),
       '<p>[</p>',
       'should support a name followed by an unclosed `[`'
