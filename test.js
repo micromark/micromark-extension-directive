@@ -49,6 +49,12 @@ test('micromark-extension-directive (syntax)', function (t) {
     )
 
     t.equal(
+      micromark(':_', options()),
+      '<p>:_</p>',
+      'should not support a colon followed by an underscore'
+    )
+
+    t.equal(
       micromark(':a9', options()),
       '<p></p>',
       'should support a digit in a name'
@@ -61,9 +67,45 @@ test('micromark-extension-directive (syntax)', function (t) {
     )
 
     t.equal(
+      micromark(':a_b', options()),
+      '<p></p>',
+      'should support an underscore in a name'
+    )
+
+    t.equal(
+      micromark(':a_', options()),
+      '<p>:a_</p>',
+      'should *not* support an underscore at the end of a name'
+    )
+
+    t.equal(
       micromark(':a:', options()),
       '<p>:a:</p>',
       'should *not* support a colon right after a name'
+    )
+
+    t.equal(
+      micromark(':+1:', options()),
+      '<p>:+1:</p>',
+      'should not interfere w/ gemoji (1)'
+    )
+
+    t.equal(
+      micromark(':heart:', options()),
+      '<p>:heart:</p>',
+      'should not interfere w/ gemoji (2)'
+    )
+
+    t.equal(
+      micromark(':call_me_hand:', options()),
+      '<p>:call_me_hand:</p>',
+      'should not interfere w/ gemoji (3)'
+    )
+
+    t.equal(
+      micromark('_:directive_', options()),
+      '<p><em>:directive</em></p>',
+      'should not interfere w/ emphasis (`_`)'
     )
 
     t.equal(

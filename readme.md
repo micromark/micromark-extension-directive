@@ -146,7 +146,8 @@ He dies.
 :::
 
 The `name` part is required.  The first character must be a letter, other
-characters can be alphanumerical and `-`.
+characters can be alphanumerical, `-`, and `_`.
+`_` cannot end a name.
 
 The `[label]` part is optional (`:x` and `:x[]` are equivalent)†.
 When used, it can include text constructs such as emphasis and so on: `x[a *b*
