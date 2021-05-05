@@ -1,6 +1,6 @@
 {
   "name": "micromark-extension-directive",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "micromark extension to support generic directives (`:cite[smith04]`)",
   "license": "MIT",
   "keywords": [
