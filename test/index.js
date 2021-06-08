@@ -62,9 +62,15 @@ test('micromark-extension-directive (syntax)', (t) => {
     )
 
     t.equal(
-      micromark(':a-', options()),
+      micromark(':a-b', options()),
       '<p></p>',
       'should support a dash in a name'
+    )
+
+    t.equal(
+      micromark(':a-', options()),
+      '<p>:a-</p>',
+      'should *not* support a dash at the end of a name'
     )
 
     t.equal(
@@ -403,7 +409,11 @@ test('micromark-extension-directive (syntax)', (t) => {
       'should support a digit in a name'
     )
 
-    t.equal(micromark('::a-', options()), '', 'should support a dash in a name')
+    t.equal(
+      micromark('::a-b', options()),
+      '',
+      'should support a dash in a name'
+    )
 
     t.equal(
       micromark('::a[', options()),
@@ -744,7 +754,7 @@ test('micromark-extension-directive (syntax)', (t) => {
     )
 
     t.equal(
-      micromark(':::a-', options()),
+      micromark(':::a-b', options()),
       '',
       'should support a dash in a name'
     )

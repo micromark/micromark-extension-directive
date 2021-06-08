@@ -27,7 +27,8 @@ export function factoryName(effects, ok, nok, nameType) {
     }
 
     effects.exit(nameType)
-    // To do next major: disallow `-` at end of name too, for consistency.
-    return self.previous === codes.underscore ? nok(code) : ok(code)
+    return self.previous === codes.dash || self.previous === codes.underscore
+      ? nok(code)
+      : ok(code)
   }
 }
