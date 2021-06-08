@@ -58,7 +58,7 @@
     "tape": "^5.0.0",
     "type-coverage": "^2.0.0",
     "typescript": "^4.0.0",
-    "xo": "^0.39.0"
+    "xo": "^0.40.0"
   },
   "scripts": {
     "build": "rimraf \"dev/**/*.d.ts\" \"test/**/*.d.ts\" && tsc && type-coverage && micromark-build",
@@ -78,7 +78,8 @@
   "xo": {
     "prettier": true,
     "rules": {
-      "unicorn/no-this-assignment": "off"
+      "unicorn/no-this-assignment": "off",
+      "unicorn/prefer-node-protocol": "off"
     }
   },
   "remarkConfig": {
