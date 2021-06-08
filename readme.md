@@ -25,6 +25,9 @@ use [`mdast-util-directive`][mdast-util-directive] with **[mdast][]** or
 
 ## Install
 
+This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
+Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
+
 [npm][]:
 
 ```sh
@@ -79,12 +82,12 @@ Now, running `node example` yields (abbreviated):
 
 ## API
 
-### `html(htmlOptions?)`
+This package exports the following identifiers: `directive`, `directiveHtml`.
+There is no default export.
 
-### `syntax(syntaxOptions?)`
+### `directive(syntaxOptions?)`
 
-> Note: `syntax` is the default export of this module, `html` is available at
-> `micromark-extension-directive/html`.
+### `directiveHtml(htmlOptions?)`
 
 Support the [generic directives proposal][prop].
 The export of `syntax` is a function that can be called with options and returns

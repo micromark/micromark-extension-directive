@@ -1,1 +1,2 @@
-module.exports = require('./lib/syntax.js')
+export {directive} from './lib/syntax.js'
+export {directiveHtml} from './lib/html.js'

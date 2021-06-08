@@ -1,8 +1,7 @@
-var test = require('tape')
-var micromark = require('micromark/lib')
-var voids = require('html-void-elements')
-var syntax = require('.')
-var html = require('./html.js')
+import test from 'tape'
+import {micromark} from 'micromark'
+import {htmlVoidElements} from 'html-void-elements'
+import {directive as syntax, directiveHtml as html} from '../index.js'
 
 test('micromark-extension-directive (syntax)', function (t) {
   t.test('text', function (t) {
@@ -1113,7 +1112,7 @@ test('micromark-extension-directive (compile)', function (t) {
         ':abbr{title="HyperText Markup Language"}',
         ':abbr[HTML]{title="HyperText Markup Language"}'
       ].join('\n\n'),
-      options({abbr: abbr})
+      options({abbr})
     ),
     [
       '<p><abbr></abbr></p>',
@@ -1143,7 +1142,7 @@ test('micromark-extension-directive (compile)', function (t) {
         ':::youtube{v=5}\ny\n:::',
         ':::youtube[Cat in a box f]{v=6}\nz\n:::'
       ].join('\n\n'),
-      options({youtube: youtube})
+      options({youtube})
     ),
     [
       '<p>Text:</p>',
@@ -1166,10 +1165,7 @@ test('micromark-extension-directive (compile)', function (t) {
   )
 
   t.equal(
-    micromark(
-      ':youtube[Cat in a box]\n:br',
-      options({youtube: youtube, '*': h})
-    ),
+    micromark(':youtube[Cat in a box]\n:br', options({youtube, '*': h})),
     '<p><youtube>Cat in a box</youtube>\n<br></p>',
     'should support fall through directives (`*`)'
   )
@@ -1185,73 +1181,73 @@ test('micromark-extension-directive (compile)', function (t) {
 
 test('content', function (t) {
   t.equal(
-    micromark(':abbr[x\\&y&amp;z]', options({abbr: abbr})),
+    micromark(':abbr[x\\&y&amp;z]', options({abbr})),
     '<p><abbr>x&amp;y&amp;z</abbr></p>',
     'should support character escapes and character references in label'
   )
 
   t.equal(
-    micromark(':abbr[x\\[y\\]z]', options({abbr: abbr})),
+    micromark(':abbr[x\\[y\\]z]', options({abbr})),
     '<p><abbr>x[y]z</abbr></p>',
     'should support escaped brackets in a label'
   )
 
   t.equal(
-    micromark(':abbr[x[y]z]', options({abbr: abbr})),
+    micromark(':abbr[x[y]z]', options({abbr})),
     '<p><abbr>x[y]z</abbr></p>',
     'should support balanced brackets in a label'
   )
 
   t.equal(
-    micromark(':abbr[a[b[c[d]e]f]g]h', options({abbr: abbr})),
+    micromark(':abbr[a[b[c[d]e]f]g]h', options({abbr})),
     '<p><abbr>a[b[c[d]e]f]g</abbr>h</p>',
     'should support balanced brackets in a label, three levels deep'
   )
 
   t.equal(
-    micromark(':abbr[a[b[c[d[e]f]g]h]i]j', options({abbr: abbr})),
+    micromark(':abbr[a[b[c[d[e]f]g]h]i]j', options({abbr})),
     '<p><abbr></abbr>[a[b[c[d[e]f]g]h]i]j</p>',
     'should *not* support balanced brackets in a label, four levels deep'
   )
 
   t.equal(
-    micromark(':abbr[a\nb\rc]', options({abbr: abbr})),
+    micromark(':abbr[a\nb\rc]', options({abbr})),
     '<p><abbr>a\nb\rc</abbr></p>',
     'should support EOLs in a label'
   )
 
   t.equal(
-    micromark(':abbr[\na\r]', options({abbr: abbr})),
+    micromark(':abbr[\na\r]', options({abbr})),
     '<p><abbr>\na\r</abbr></p>',
     'should support EOLs at the edges of a label'
   )
 
   t.equal(
-    micromark(':abbr[a *b* **c** d]', options({abbr: abbr})),
+    micromark(':abbr[a *b* **c** d]', options({abbr})),
     '<p><abbr>a <em>b</em> <strong>c</strong> d</abbr></p>',
     'should support markdown in a label'
   )
 
   t.equal(
-    micromark(':abbr{title=a&apos;b}', options({abbr: abbr})),
+    micromark(':abbr{title=a&apos;b}', options({abbr})),
     '<p><abbr title="a\'b"></abbr></p>',
     'should support character references in unquoted attribute values'
   )
 
   t.equal(
-    micromark(':abbr{title="a&apos;b"}', options({abbr: abbr})),
+    micromark(':abbr{title="a&apos;b"}', options({abbr})),
     '<p><abbr title="a\'b"></abbr></p>',
     'should support character references in double attribute values'
   )
 
   t.equal(
-    micromark(":abbr{title='a&apos;b'}", options({abbr: abbr})),
+    micromark(":abbr{title='a&apos;b'}", options({abbr})),
     '<p><abbr title="a\'b"></abbr></p>',
     'should support character references in single attribute values'
   )
 
   t.equal(
-    micromark(':abbr{title="a&somethingelse;b"}', options({abbr: abbr})),
+    micromark(':abbr{title="a&somethingelse;b"}', options({abbr})),
     '<p><abbr title="a&amp;somethingelse;b"></abbr></p>',
     'should support unknown character references in attribute values'
   )
@@ -1429,7 +1425,7 @@ function h(d) {
     if (d.type === 'containerDirective') this.lineEndingIfNeeded()
   }
 
-  if (!voids.includes(d.name)) this.tag('</' + d.name + '>')
+  if (!htmlVoidElements.includes(d.name)) this.tag('</' + d.name + '>')
 }
 
 function options(options) {
