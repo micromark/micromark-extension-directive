@@ -1,1 +1,1 @@
-module.exports = require('./lib/html')
+module.exports = require('./lib/html.js')

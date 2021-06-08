@@ -2,7 +2,7 @@ var test = require('tape')
 var micromark = require('micromark/lib')
 var voids = require('html-void-elements')
 var syntax = require('.')
-var html = require('./html')
+var html = require('./html.js')
 
 test('micromark-extension-directive (syntax)', function (t) {
   t.test('text', function (t) {

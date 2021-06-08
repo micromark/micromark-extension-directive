@@ -1,1 +1,1 @@
-module.exports = require('./lib/syntax')
+module.exports = require('./lib/syntax.js')
