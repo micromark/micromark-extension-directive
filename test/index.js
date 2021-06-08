@@ -1,5 +1,5 @@
 /**
- * @typedef {import('../dev/index.js').Options} Options
+ * @typedef {import('../dev/index.js').HtmlOptions} HtmlOptions
  * @typedef {import('../dev/index.js').Handle} Handle
  */
 
@@ -1453,7 +1453,7 @@ function h(d) {
 }
 
 /**
- * @param {Options} [options]
+ * @param {HtmlOptions} [options]
  */
 function options(options) {
   return {

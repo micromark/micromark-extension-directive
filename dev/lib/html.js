@@ -18,7 +18,7 @@
  *
  * @typedef {(this: CompileContext, directive: Directive) => boolean|void} Handle
  *
- * @typedef {Record<string, Handle>} Options
+ * @typedef {Record<string, Handle>} HtmlOptions
  */
 
 import assert from 'assert'
@@ -27,7 +27,7 @@ import {decodeEntity} from 'parse-entities/decode-entity.js'
 const own = {}.hasOwnProperty
 
 /**
- * @param {Options} [options]
+ * @param {HtmlOptions} [options]
  * @returns {HtmlExtension}
  */
 export function directiveHtml(options = {}) {
