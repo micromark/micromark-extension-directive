@@ -1,3 +1,9 @@
+/**
+ * @typedef {import('micromark-util-types').Effects} Effects
+ * @typedef {import('micromark-util-types').State} State
+ * @typedef {import('micromark-util-types').Code} Code
+ */
+
 import assert from 'assert'
 import {factorySpace} from 'micromark-factory-space'
 import {factoryWhitespace} from 'micromark-factory-whitespace'
@@ -11,6 +17,23 @@ import {
 import {codes} from 'micromark-util-symbol/codes.js'
 import {types} from 'micromark-util-symbol/types.js'
 
+/**
+ * @param {Effects} effects
+ * @param {State} ok
+ * @param {State} nok
+ * @param {string} attributesType
+ * @param {string} attributesMarkerType
+ * @param {string} attributeType
+ * @param {string} attributeIdType
+ * @param {string} attributeClassType
+ * @param {string} attributeNameType
+ * @param {string} attributeInitializerType
+ * @param {string} attributeValueLiteralType
+ * @param {string} attributeValueType
+ * @param {string} attributeValueMarker
+ * @param {string} attributeValueData
+ * @param {boolean} [disallowEol=false]
+ */
 /* eslint-disable-next-line max-params */
 export function factoryAttributes(
   effects,
@@ -29,11 +52,14 @@ export function factoryAttributes(
   attributeValueData,
   disallowEol
 ) {
+  /** @type {string} */
   let type
+  /** @type {Code|undefined} */
   let marker
 
   return start
 
+  /** @type {State} */
   function start(code) {
     assert(code === codes.leftCurlyBrace, 'expected `{`')
     effects.enter(attributesType)
@@ -43,6 +69,7 @@ export function factoryAttributes(
     return between
   }
 
+  /** @type {State} */
   function between(code) {
     if (code === codes.numberSign) {
       type = attributeIdType
@@ -72,6 +99,7 @@ export function factoryAttributes(
     return end(code)
   }
 
+  /** @type {State} */
   function shortcutStart(code) {
     effects.enter(attributeType)
     effects.enter(type)
@@ -81,6 +109,7 @@ export function factoryAttributes(
     return shortcutStartAfter
   }
 
+  /** @type {State} */
   function shortcutStartAfter(code) {
     if (
       code === codes.eof ||
@@ -103,6 +132,7 @@ export function factoryAttributes(
     return shortcut
   }
 
+  /** @type {State} */
   function shortcut(code) {
     if (
       code === codes.eof ||
@@ -132,6 +162,7 @@ export function factoryAttributes(
     return shortcut
   }
 
+  /** @type {State} */
   function name(code) {
     if (
       code === codes.dash ||
@@ -157,6 +188,7 @@ export function factoryAttributes(
     return nameAfter(code)
   }
 
+  /** @type {State} */
   function nameAfter(code) {
     if (code === codes.equalsTo) {
       effects.enter(attributeInitializerType)
@@ -170,6 +202,7 @@ export function factoryAttributes(
     return between(code)
   }
 
+  /** @type {State} */
   function valueBefore(code) {
     if (
       code === codes.eof ||
@@ -207,6 +240,7 @@ export function factoryAttributes(
     return valueUnquoted
   }
 
+  /** @type {State} */
   function valueUnquoted(code) {
     if (
       code === codes.eof ||
@@ -231,6 +265,7 @@ export function factoryAttributes(
     return valueUnquoted
   }
 
+  /** @type {State} */
   function valueQuotedStart(code) {
     if (code === marker) {
       effects.enter(attributeValueMarker)
@@ -245,6 +280,7 @@ export function factoryAttributes(
     return valueQuotedBetween(code)
   }
 
+  /** @type {State} */
   function valueQuotedBetween(code) {
     if (code === marker) {
       effects.exit(attributeValueType)
@@ -267,6 +303,7 @@ export function factoryAttributes(
     return valueQuoted
   }
 
+  /** @type {State} */
   function valueQuoted(code) {
     if (code === marker || code === codes.eof || markdownLineEnding(code)) {
       effects.exit(attributeValueData)
@@ -277,12 +314,14 @@ export function factoryAttributes(
     return valueQuoted
   }
 
+  /** @type {State} */
   function valueQuotedAfter(code) {
     return code === codes.rightCurlyBrace || markdownLineEndingOrSpace(code)
       ? between(code)
       : end(code)
   }
 
+  /** @type {State} */
   function end(code) {
     if (code === codes.rightCurlyBrace) {
       effects.enter(attributesMarkerType)

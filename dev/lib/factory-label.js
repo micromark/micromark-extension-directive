@@ -1,3 +1,8 @@
+/**
+ * @typedef {import('micromark-util-types').Effects} Effects
+ * @typedef {import('micromark-util-types').State} State
+ */
+
 import assert from 'assert'
 import {markdownLineEnding} from 'micromark-util-character'
 import {codes} from 'micromark-util-symbol/codes.js'
@@ -9,6 +14,15 @@ import {types} from 'micromark-util-symbol/types.js'
 // to allow empty labels, balanced brackets (such as for nested directives),
 // text instead of strings, and optionally disallows EOLs.
 
+/**
+ * @param {Effects} effects
+ * @param {State} ok
+ * @param {State} nok
+ * @param {string} type
+ * @param {string} markerType
+ * @param {string} stringType
+ * @param {boolean} [disallowEol=false]
+ */
 // eslint-disable-next-line max-params
 export function factoryLabel(
   effects,
@@ -24,6 +38,7 @@ export function factoryLabel(
 
   return start
 
+  /** @type {State} */
   function start(code) {
     assert(code === codes.leftSquareBracket, 'expected `[`')
     effects.enter(type)
@@ -33,6 +48,7 @@ export function factoryLabel(
     return afterStart
   }
 
+  /** @type {State} */
   function afterStart(code) {
     if (code === codes.rightSquareBracket) {
       effects.enter(markerType)
@@ -46,6 +62,7 @@ export function factoryLabel(
     return atBreak(code)
   }
 
+  /** @type {State} */
   function atBreak(code) {
     if (code === codes.eof || size > constants.linkReferenceSizeMax) {
       return nok(code)
@@ -70,6 +87,7 @@ export function factoryLabel(
     return label(code)
   }
 
+  /** @type {State} */
   function label(code) {
     if (
       code === codes.eof ||
@@ -96,6 +114,7 @@ export function factoryLabel(
     return code === codes.backslash ? labelEscape : label
   }
 
+  /** @type {State} */
   function atClosingBrace(code) {
     effects.exit(stringType)
     effects.enter(markerType)
@@ -105,6 +124,7 @@ export function factoryLabel(
     return ok
   }
 
+  /** @type {State} */
   function labelEscape(code) {
     if (
       code === codes.leftSquareBracket ||

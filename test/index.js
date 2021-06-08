@@ -1,3 +1,8 @@
+/**
+ * @typedef {import('../dev/index.js').Options} Options
+ * @typedef {import('../dev/index.js').Handle} Handle
+ */
+
 import test from 'tape'
 import {micromark} from 'micromark'
 import {htmlVoidElements} from 'html-void-elements'
@@ -1369,6 +1374,7 @@ test('content', (t) => {
   t.end()
 })
 
+/** @type {Handle} */
 function abbr(d) {
   if (d.type !== 'textDirective') return false
 
@@ -1383,9 +1389,11 @@ function abbr(d) {
   this.tag('</abbr>')
 }
 
+/** @type {Handle} */
 function youtube(d) {
   const attrs = d.attributes || {}
   const v = attrs.v
+  /** @type {string} */
   let prop
 
   if (!v) return false
@@ -1416,10 +1424,13 @@ function youtube(d) {
   this.tag('</iframe>')
 }
 
+/** @type {Handle} */
 function h(d) {
   const content = d.content || d.label
   const attrs = d.attributes || {}
+  /** @type {Array.<string>} */
   const list = []
+  /** @type {string} */
   let prop
 
   for (prop in attrs) {
@@ -1441,6 +1452,9 @@ function h(d) {
   if (!htmlVoidElements.includes(d.name)) this.tag('</' + d.name + '>')
 }
 
+/**
+ * @param {Options} [options]
+ */
 function options(options) {
   return {
     allowDangerousHtml: true,

@@ -103,7 +103,8 @@ None yet, but might be added in the future.
 
 ###### `htmlOptions`
 
-An object mapping names of directives to handlers ([`Object.<Handle>`][handle]).
+An object mapping names of directives to handlers
+([`Record<string, Handle>`][handle]).
 The special name `'*'` is the fallback to handle all unhandled directives.
 
 ### `function handle(directive)`

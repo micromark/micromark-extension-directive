@@ -1,7 +1,35 @@
+/**
+ * @typedef {import('micromark-util-types').HtmlExtension} HtmlExtension
+ * @typedef {import('micromark-util-types').Handle} _Handle
+ * @typedef {import('micromark-util-types').CompileContext} CompileContext
+ */
+
+/**
+ * @typedef {[string, string]} Attribute
+ * @typedef {'containerDirective'|'leafDirective'|'textDirective'} DirectiveType
+ *
+ * @typedef Directive
+ * @property {DirectiveType} type
+ * @property {string} name
+ * @property {string} [label]
+ * @property {Record<string, string>} [attributes]
+ * @property {string} [content]
+ * @property {number} [_fenceCount]
+ *
+ * @typedef {(this: CompileContext, directive: Directive) => boolean|void} Handle
+ *
+ * @typedef {Record<string, Handle>} Options
+ */
+
+import assert from 'assert'
 import {decodeEntity} from 'parse-entities/decode-entity.js'
 
 const own = {}.hasOwnProperty
 
+/**
+ * @param {Options} [options]
+ * @returns {HtmlExtension}
+ */
 export function directiveHtml(options = {}) {
   return {
     enter: {
@@ -58,65 +86,97 @@ export function directiveHtml(options = {}) {
     }
   }
 
+  /**
+   * @this {CompileContext}
+   * @param {DirectiveType} type
+   */
   function enter(type) {
+    /** @type {Directive[]} */
+    // @ts-expect-error
     let stack = this.getData('directiveStack')
     if (!stack) this.setData('directiveStack', (stack = []))
-    stack.push({type})
+    stack.push({type, name: ''})
   }
 
+  /** @type {_Handle} */
   function exitName(token) {
+    /** @type {Directive[]} */
+    // @ts-expect-error
     const stack = this.getData('directiveStack')
     stack[stack.length - 1].name = this.sliceSerialize(token)
   }
 
+  /** @type {_Handle} */
   function enterLabel() {
     this.buffer()
   }
 
+  /** @type {_Handle} */
   function exitLabel() {
     const data = this.resume()
+    /** @type {Directive[]} */
+    // @ts-expect-error
     const stack = this.getData('directiveStack')
     stack[stack.length - 1].label = data
   }
 
+  /** @type {_Handle} */
   function enterAttributes() {
     this.buffer()
     this.setData('directiveAttributes', [])
   }
 
+  /** @type {_Handle} */
   function exitAttributeIdValue(token) {
-    this.getData('directiveAttributes').push([
-      'id',
-      decodeLight(this.sliceSerialize(token))
-    ])
+    /** @type {Attribute[]} */
+    // @ts-expect-error
+    const attributes = this.getData('directiveAttributes')
+    attributes.push(['id', decodeLight(this.sliceSerialize(token))])
   }
 
+  /** @type {_Handle} */
   function exitAttributeClassValue(token) {
-    this.getData('directiveAttributes').push([
-      'class',
-      decodeLight(this.sliceSerialize(token))
-    ])
+    /** @type {Attribute[]} */
+    // @ts-expect-error
+    const attributes = this.getData('directiveAttributes')
+
+    attributes.push(['class', decodeLight(this.sliceSerialize(token))])
   }
 
+  /** @type {_Handle} */
   function exitAttributeName(token) {
     // Attribute names in CommonMark are significantly limited, so character
     // references can’t exist.
-    this.getData('directiveAttributes').push([this.sliceSerialize(token), ''])
+    /** @type {Attribute[]} */
+    // @ts-expect-error
+    const attributes = this.getData('directiveAttributes')
+
+    attributes.push([this.sliceSerialize(token), ''])
   }
 
+  /** @type {_Handle} */
   function exitAttributeValue(token) {
+    /** @type {Attribute[]} */
+    // @ts-expect-error
     const attributes = this.getData('directiveAttributes')
     attributes[attributes.length - 1][1] = decodeLight(
       this.sliceSerialize(token)
     )
   }
 
+  /** @type {_Handle} */
   function exitAttributes() {
+    /** @type {Directive[]} */
+    // @ts-expect-error
     const stack = this.getData('directiveStack')
+    /** @type {Attribute[]} */
+    // @ts-expect-error
     const attributes = this.getData('directiveAttributes')
+    /** @type {Directive['attributes']} */
     const cleaned = {}
-    let index = -1
+    /** @type {Attribute} */
     let attribute
+    let index = -1
 
     while (++index < attributes.length) {
       attribute = attributes[index]
@@ -133,24 +193,37 @@ export function directiveHtml(options = {}) {
     stack[stack.length - 1].attributes = cleaned
   }
 
+  /** @type {_Handle} */
   function exitContainerContent() {
     const data = this.resume()
+    /** @type {Directive[]} */
+    // @ts-expect-error
     const stack = this.getData('directiveStack')
     stack[stack.length - 1].content = data
   }
 
+  /** @type {_Handle} */
   function exitContainerFence() {
+    /** @type {Directive[]} */
+    // @ts-expect-error
     const stack = this.getData('directiveStack')
     const directive = stack[stack.length - 1]
-    if (!directive.fenceCount) directive.fenceCount = 0
-    directive.fenceCount++
-    if (directive.fenceCount === 1) this.setData('slurpOneLineEnding', true)
+    if (!directive._fenceCount) directive._fenceCount = 0
+    directive._fenceCount++
+    if (directive._fenceCount === 1) this.setData('slurpOneLineEnding', true)
   }
 
+  /** @type {_Handle} */
   function exit() {
+    /** @type {Directive} */
+    // @ts-expect-error
     const directive = this.getData('directiveStack').pop()
+    /** @type {boolean|undefined} */
     let found
+    /** @type {boolean|void} */
     let result
+
+    assert(directive.name, 'expected `name`')
 
     if (own.call(options, directive.name)) {
       result = options[directive.name].call(this, directive)
@@ -168,6 +241,10 @@ export function directiveHtml(options = {}) {
   }
 }
 
+/**
+ * @param {string} value
+ * @returns {string}
+ */
 function decodeLight(value) {
   return value.replace(
     /&(#(\d{1,7}|x[\da-f]{1,6})|[\da-z]{1,31});/gi,
@@ -175,6 +252,11 @@ function decodeLight(value) {
   )
 }
 
+/**
+ * @param {string} $0
+ * @param {string} $1
+ * @returns {string}
+ */
 function decodeIfPossible($0, $1) {
   return decodeEntity($1) || $0
 }
