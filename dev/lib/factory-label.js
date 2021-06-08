@@ -10,7 +10,7 @@ import {constants} from 'micromark-util-symbol/constants.js'
 import {types} from 'micromark-util-symbol/types.js'
 
 // This is a fork of:
-// <https://github.com/micromark/micromark/blob/bf53bf9/lib/tokenize/factory-label.js>
+// <https://github.com/micromark/micromark/tree/main/packages/micromark-factory-label>
 // to allow empty labels, balanced brackets (such as for nested directives),
 // text instead of strings, and optionally disallows EOLs.
 
