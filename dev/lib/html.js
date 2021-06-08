@@ -2,21 +2,27 @@ import {decodeEntity} from 'parse-entities/decode-entity.js'
 
 const own = {}.hasOwnProperty
 
-export function directiveHtml(options) {
-  const extensions = options || {}
-
+export function directiveHtml(options = {}) {
   return {
     enter: {
-      directiveContainer: enterContainer,
+      directiveContainer() {
+        return enter.call(this, 'containerDirective')
+      },
       directiveContainerAttributes: enterAttributes,
-      directiveContainerContent: enterContainerContent,
       directiveContainerLabel: enterLabel,
+      directiveContainerContent() {
+        this.buffer()
+      },
 
-      directiveLeaf: enterLeaf,
+      directiveLeaf() {
+        return enter.call(this, 'leafDirective')
+      },
       directiveLeafAttributes: enterAttributes,
       directiveLeafLabel: enterLabel,
 
-      directiveText: enterText,
+      directiveText() {
+        return enter.call(this, 'textDirective')
+      },
       directiveTextAttributes: enterAttributes,
       directiveTextLabel: enterLabel
     },
@@ -50,18 +56,6 @@ export function directiveHtml(options) {
       directiveTextLabel: exitLabel,
       directiveTextName: exitName
     }
-  }
-
-  function enterContainer() {
-    return enter.call(this, 'containerDirective')
-  }
-
-  function enterLeaf() {
-    return enter.call(this, 'leafDirective')
-  }
-
-  function enterText() {
-    return enter.call(this, 'textDirective')
   }
 
   function enter(type) {
@@ -139,10 +133,6 @@ export function directiveHtml(options) {
     stack[stack.length - 1].attributes = cleaned
   }
 
-  function enterContainerContent() {
-    this.buffer()
-  }
-
   function exitContainerContent() {
     const data = this.resume()
     const stack = this.getData('directiveStack')
@@ -162,13 +152,13 @@ export function directiveHtml(options) {
     let found
     let result
 
-    if (own.call(extensions, directive.name)) {
-      result = extensions[directive.name].call(this, directive)
+    if (own.call(options, directive.name)) {
+      result = options[directive.name].call(this, directive)
       found = result !== false
     }
 
-    if (!found && own.call(extensions, '*')) {
-      result = extensions['*'].call(this, directive)
+    if (!found && own.call(options, '*')) {
+      result = options['*'].call(this, directive)
       found = result !== false
     }
 
