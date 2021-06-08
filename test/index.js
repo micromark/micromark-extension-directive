@@ -3,8 +3,10 @@ import {micromark} from 'micromark'
 import {htmlVoidElements} from 'html-void-elements'
 import {directive as syntax, directiveHtml as html} from '../index.js'
 
-test('micromark-extension-directive (syntax)', function (t) {
-  t.test('text', function (t) {
+const own = {}.hasOwnProperty
+
+test('micromark-extension-directive (syntax)', (t) => {
+  t.test('text', (t) => {
     t.equal(
       micromark('\\:a', options()),
       '<p>:a</p>',
@@ -362,7 +364,7 @@ test('micromark-extension-directive (syntax)', function (t) {
     t.end()
   })
 
-  t.test('leaf', function (t) {
+  t.test('leaf', (t) => {
     t.equal(micromark('::b', options()), '', 'should support a directive')
 
     t.equal(
@@ -696,7 +698,7 @@ test('micromark-extension-directive (syntax)', function (t) {
     t.end()
   })
 
-  t.test('container', function (t) {
+  t.test('container', (t) => {
     t.equal(micromark(':::b', options()), '', 'should support a directive')
 
     t.equal(
@@ -1103,7 +1105,7 @@ test('micromark-extension-directive (syntax)', function (t) {
   t.end()
 })
 
-test('micromark-extension-directive (compile)', function (t) {
+test('micromark-extension-directive (compile)', (t) => {
   t.equal(
     micromark(
       [
@@ -1179,7 +1181,7 @@ test('micromark-extension-directive (compile)', function (t) {
   t.end()
 })
 
-test('content', function (t) {
+test('content', (t) => {
   t.equal(
     micromark(':abbr[x\\&y&amp;z]', options({abbr})),
     '<p><abbr>x&amp;y&amp;z</abbr></p>',
@@ -1372,14 +1374,13 @@ function abbr(d) {
 }
 
 function youtube(d) {
-  var attrs = d.attributes || {}
-  var v = attrs.v
-  var list
-  var prop
+  const attrs = d.attributes || {}
+  const v = attrs.v
+  let prop
 
   if (!v) return false
 
-  list = [
+  const list = [
     'src="https://www.youtube.com/embed/' + this.encode(v) + '"',
     'allowfullscreen'
   ]
@@ -1406,17 +1407,19 @@ function youtube(d) {
 }
 
 function h(d) {
-  var content = d.content || d.label
-  var attrs = d.attributes || {}
-  var list = []
-  var prop
+  const content = d.content || d.label
+  const attrs = d.attributes || {}
+  const list = []
+  let prop
 
   for (prop in attrs) {
-    list.push(this.encode(prop) + '="' + this.encode(attrs[prop]) + '"')
+    if (own.call(attrs, prop)) {
+      list.push(this.encode(prop) + '="' + this.encode(attrs[prop]) + '"')
+    }
   }
 
   this.tag('<' + d.name)
-  if (list.length) this.tag(' ' + list.join(' '))
+  if (list.length > 0) this.tag(' ' + list.join(' '))
   this.tag('>')
 
   if (content) {
