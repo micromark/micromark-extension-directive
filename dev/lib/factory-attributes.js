@@ -1,3 +1,4 @@
+import assert from 'assert'
 import {factorySpace} from 'micromark-factory-space'
 import {factoryWhitespace} from 'micromark-factory-whitespace'
 import {
@@ -7,6 +8,8 @@ import {
   markdownLineEndingOrSpace,
   markdownSpace
 } from 'micromark-util-character'
+import {codes} from 'micromark-util-symbol/codes.js'
+import {types} from 'micromark-util-symbol/types.js'
 
 /* eslint-disable-next-line max-params */
 export function factoryAttributes(
@@ -32,7 +35,7 @@ export function factoryAttributes(
   return start
 
   function start(code) {
-    // Always a `{`
+    assert(code === codes.leftCurlyBrace, 'expected `{`')
     effects.enter(attributesType)
     effects.enter(attributesMarkerType)
     effects.consume(code)
@@ -41,17 +44,17 @@ export function factoryAttributes(
   }
 
   function between(code) {
-    if (code === 35 /* `#` */) {
+    if (code === codes.numberSign) {
       type = attributeIdType
       return shortcutStart(code)
     }
 
-    if (code === 46 /* `.` */) {
+    if (code === codes.dot) {
       type = attributeClassType
       return shortcutStart(code)
     }
 
-    if (code === 58 /* `:` */ || code === 95 /* `_` */ || asciiAlpha(code)) {
+    if (code === codes.colon || code === codes.underscore || asciiAlpha(code)) {
       effects.enter(attributeType)
       effects.enter(attributeNameType)
       effects.consume(code)
@@ -59,7 +62,7 @@ export function factoryAttributes(
     }
 
     if (disallowEol && markdownSpace(code)) {
-      return factorySpace(effects, between, 'whitespace')(code)
+      return factorySpace(effects, between, types.whitespace)(code)
     }
 
     if (!disallowEol && markdownLineEndingOrSpace(code)) {
@@ -80,16 +83,16 @@ export function factoryAttributes(
 
   function shortcutStartAfter(code) {
     if (
-      code === null /* EOF */ ||
-      code === 34 /* `"` */ ||
-      code === 35 /* `#` */ ||
-      code === 39 /* `'` */ ||
-      code === 46 /* `.` */ ||
-      code === 60 /* `<` */ ||
-      code === 61 /* `=` */ ||
-      code === 62 /* `>` */ ||
-      code === 96 /* `` ` `` */ ||
-      code === 125 /* `}` */ ||
+      code === codes.eof ||
+      code === codes.quotationMark ||
+      code === codes.numberSign ||
+      code === codes.apostrophe ||
+      code === codes.dot ||
+      code === codes.lessThan ||
+      code === codes.equalsTo ||
+      code === codes.greaterThan ||
+      code === codes.graveAccent ||
+      code === codes.rightCurlyBrace ||
       markdownLineEndingOrSpace(code)
     ) {
       return nok(code)
@@ -102,21 +105,21 @@ export function factoryAttributes(
 
   function shortcut(code) {
     if (
-      code === null /* EOF */ ||
-      code === 34 /* `"` */ ||
-      code === 39 /* `'` */ ||
-      code === 60 /* `<` */ ||
-      code === 61 /* `=` */ ||
-      code === 62 /* `>` */ ||
-      code === 96 /* `` ` `` */
+      code === codes.eof ||
+      code === codes.quotationMark ||
+      code === codes.apostrophe ||
+      code === codes.lessThan ||
+      code === codes.equalsTo ||
+      code === codes.greaterThan ||
+      code === codes.graveAccent
     ) {
       return nok(code)
     }
 
     if (
-      code === 35 /* `#` */ ||
-      code === 46 /* `.` */ ||
-      code === 125 /* `}` */ ||
+      code === codes.numberSign ||
+      code === codes.dot ||
+      code === codes.rightCurlyBrace ||
       markdownLineEndingOrSpace(code)
     ) {
       effects.exit(type + 'Value')
@@ -131,10 +134,10 @@ export function factoryAttributes(
 
   function name(code) {
     if (
-      code === 45 /* `-` */ ||
-      code === 46 /* `.` */ ||
-      code === 58 /* `:` */ ||
-      code === 95 /* `_` */ ||
+      code === codes.dash ||
+      code === codes.dot ||
+      code === codes.colon ||
+      code === codes.underscore ||
       asciiAlphanumeric(code)
     ) {
       effects.consume(code)
@@ -144,7 +147,7 @@ export function factoryAttributes(
     effects.exit(attributeNameType)
 
     if (disallowEol && markdownSpace(code)) {
-      return factorySpace(effects, nameAfter, 'whitespace')(code)
+      return factorySpace(effects, nameAfter, types.whitespace)(code)
     }
 
     if (!disallowEol && markdownLineEndingOrSpace(code)) {
@@ -155,7 +158,7 @@ export function factoryAttributes(
   }
 
   function nameAfter(code) {
-    if (code === 61 /* `=` */) {
+    if (code === codes.equalsTo) {
       effects.enter(attributeInitializerType)
       effects.consume(code)
       effects.exit(attributeInitializerType)
@@ -169,18 +172,18 @@ export function factoryAttributes(
 
   function valueBefore(code) {
     if (
-      code === null /* EOF */ ||
-      code === 60 /* `<` */ ||
-      code === 61 /* `=` */ ||
-      code === 62 /* `>` */ ||
-      code === 96 /* `` ` `` */ ||
-      code === 125 /* `}` */ ||
+      code === codes.eof ||
+      code === codes.lessThan ||
+      code === codes.equalsTo ||
+      code === codes.greaterThan ||
+      code === codes.graveAccent ||
+      code === codes.rightCurlyBrace ||
       (disallowEol && markdownLineEnding(code))
     ) {
       return nok(code)
     }
 
-    if (code === 34 /* `"` */ || code === 39 /* `'` */) {
+    if (code === codes.quotationMark || code === codes.apostrophe) {
       effects.enter(attributeValueLiteralType)
       effects.enter(attributeValueMarker)
       effects.consume(code)
@@ -190,7 +193,7 @@ export function factoryAttributes(
     }
 
     if (disallowEol && markdownSpace(code)) {
-      return factorySpace(effects, valueBefore, 'whitespace')(code)
+      return factorySpace(effects, valueBefore, types.whitespace)(code)
     }
 
     if (!disallowEol && markdownLineEndingOrSpace(code)) {
@@ -206,18 +209,18 @@ export function factoryAttributes(
 
   function valueUnquoted(code) {
     if (
-      code === null /* EOF */ ||
-      code === 34 /* `"` */ ||
-      code === 39 /* `'` */ ||
-      code === 60 /* `<` */ ||
-      code === 61 /* `=` */ ||
-      code === 62 /* `>` */ ||
-      code === 96 /* `` ` `` */
+      code === codes.eof ||
+      code === codes.quotationMark ||
+      code === codes.apostrophe ||
+      code === codes.lessThan ||
+      code === codes.equalsTo ||
+      code === codes.greaterThan ||
+      code === codes.graveAccent
     ) {
       return nok(code)
     }
 
-    if (code === 125 /* `}` */ || markdownLineEndingOrSpace(code)) {
+    if (code === codes.rightCurlyBrace || markdownLineEndingOrSpace(code)) {
       effects.exit(attributeValueData)
       effects.exit(attributeValueType)
       effects.exit(attributeType)
@@ -248,7 +251,7 @@ export function factoryAttributes(
       return valueQuotedStart(code)
     }
 
-    if (code === null /* EOF */) {
+    if (code === codes.eof) {
       return nok(code)
     }
 
@@ -265,11 +268,7 @@ export function factoryAttributes(
   }
 
   function valueQuoted(code) {
-    if (
-      code === marker ||
-      code === null /* EOF */ ||
-      markdownLineEnding(code)
-    ) {
+    if (code === marker || code === codes.eof || markdownLineEnding(code)) {
       effects.exit(attributeValueData)
       return valueQuotedBetween(code)
     }
@@ -279,13 +278,13 @@ export function factoryAttributes(
   }
 
   function valueQuotedAfter(code) {
-    return code === 125 /* `}` */ || markdownLineEndingOrSpace(code)
+    return code === codes.rightCurlyBrace || markdownLineEndingOrSpace(code)
       ? between(code)
       : end(code)
   }
 
   function end(code) {
-    if (code === 125 /* `}` */) {
+    if (code === codes.rightCurlyBrace) {
       effects.enter(attributesMarkerType)
       effects.consume(code)
       effects.exit(attributesMarkerType)

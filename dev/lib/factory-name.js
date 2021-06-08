@@ -1,4 +1,5 @@
 import {asciiAlpha, asciiAlphanumeric} from 'micromark-util-character'
+import {codes} from 'micromark-util-symbol/codes.js'
 
 export function factoryName(effects, ok, nok, nameType) {
   const self = this
@@ -17,8 +18,8 @@ export function factoryName(effects, ok, nok, nameType) {
 
   function name(code) {
     if (
-      code === 45 /* `-` */ ||
-      code === 95 /* `_` */ ||
+      code === codes.dash ||
+      code === codes.underscore ||
       asciiAlphanumeric(code)
     ) {
       effects.consume(code)
@@ -27,6 +28,6 @@ export function factoryName(effects, ok, nok, nameType) {
 
     effects.exit(nameType)
     // To do next major: disallow `-` at end of name too, for consistency.
-    return self.previous === 95 /* `_` */ ? nok(code) : ok(code)
+    return self.previous === codes.underscore ? nok(code) : ok(code)
   }
 }

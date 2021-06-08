@@ -1,6 +1,9 @@
+import assert from 'assert'
 import {factorySpace} from 'micromark-factory-space'
 import {markdownLineEnding} from 'micromark-util-character'
-// . import prefixSize from 'micromark/dist/util/prefix-size'
+import {codes} from 'micromark-util-symbol/codes.js'
+import {constants} from 'micromark-util-symbol/constants.js'
+import {types} from 'micromark-util-symbol/types.js'
 import {factoryAttributes} from './factory-attributes.js'
 import {factoryLabel} from './factory-label.js'
 import {factoryName} from './factory-name.js'
@@ -17,7 +20,7 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
   const self = this
   const tail = self.events[self.events.length - 1]
   const initialSize =
-    tail && tail[1].type === 'linePrefix'
+    tail && tail[1].type === types.linePrefix
       ? tail[2].sliceSerialize(tail[1], true).length
       : 0
   let sizeOpen = 0
@@ -26,8 +29,7 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
   return start
 
   function start(code) {
-    /* istanbul ignore if - handled by mm */
-    if (code !== 58 /* `:` */) throw new Error('expected `:`')
+    assert(code === codes.colon, 'expected `:`')
     effects.enter('directiveContainer')
     effects.enter('directiveContainerFence')
     effects.enter('directiveContainerSequence')
@@ -35,13 +37,13 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
   }
 
   function sequenceOpen(code) {
-    if (code === 58 /* `:` */) {
+    if (code === codes.colon) {
       effects.consume(code)
       sizeOpen++
       return sequenceOpen
     }
 
-    if (sizeOpen < 3) {
+    if (sizeOpen < constants.codeFencedSequenceSizeMin) {
       return nok(code)
     }
 
@@ -56,33 +58,33 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
   }
 
   function afterName(code) {
-    return code === 91 /* `[` */
+    return code === codes.leftSquareBracket
       ? effects.attempt(label, afterLabel, afterLabel)(code)
       : afterLabel(code)
   }
 
   function afterLabel(code) {
-    return code === 123 /* `{` */
+    return code === codes.leftCurlyBrace
       ? effects.attempt(attributes, afterAttributes, afterAttributes)(code)
       : afterAttributes(code)
   }
 
   function afterAttributes(code) {
-    return factorySpace(effects, openAfter, 'whitespace')(code)
+    return factorySpace(effects, openAfter, types.whitespace)(code)
   }
 
   function openAfter(code) {
     effects.exit('directiveContainerFence')
 
-    if (code === null) {
+    if (code === codes.eof) {
       effects.exit('directiveContainer')
       return ok(code)
     }
 
     if (markdownLineEnding(code)) {
-      effects.enter('lineEnding')
+      effects.enter(types.lineEnding)
       effects.consume(code)
-      effects.exit('lineEnding')
+      effects.exit(types.lineEnding)
       return self.interrupt ? ok : contentStart
     }
 
@@ -90,7 +92,7 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
   }
 
   function contentStart(code) {
-    if (code === null) {
+    if (code === codes.eof) {
       effects.exit('directiveContainer')
       return ok(code)
     }
@@ -100,7 +102,7 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
   }
 
   function lineStart(code) {
-    if (code === null) {
+    if (code === codes.eof) {
       return after(code)
     }
 
@@ -108,13 +110,13 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
       {tokenize: tokenizeClosingFence, partial: true},
       after,
       initialSize
-        ? factorySpace(effects, chunkStart, 'linePrefix', initialSize + 1)
+        ? factorySpace(effects, chunkStart, types.linePrefix, initialSize + 1)
         : chunkStart
     )(code)
   }
 
   function chunkStart(code) {
-    if (code === null) {
+    if (code === codes.eof) {
       return after(code)
     }
 
@@ -128,7 +130,7 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
   }
 
   function contentContinue(code) {
-    if (code === null) {
+    if (code === codes.eof) {
       effects.exit('chunkDocument')
       return after(code)
     }
@@ -152,7 +154,12 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
   function tokenizeClosingFence(effects, ok, nok) {
     let size = 0
 
-    return factorySpace(effects, closingPrefixAfter, 'linePrefix', 4)
+    return factorySpace(
+      effects,
+      closingPrefixAfter,
+      types.linePrefix,
+      constants.tabSize
+    )
 
     function closingPrefixAfter(code) {
       effects.enter('directiveContainerFence')
@@ -161,7 +168,7 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
     }
 
     function closingSequence(code) {
-      if (code === 58 /* `:` */) {
+      if (code === codes.colon) {
         effects.consume(code)
         size++
         return closingSequence
@@ -169,11 +176,11 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
 
       if (size < sizeOpen) return nok(code)
       effects.exit('directiveContainerSequence')
-      return factorySpace(effects, closingSequenceEnd, 'whitespace')(code)
+      return factorySpace(effects, closingSequenceEnd, types.whitespace)(code)
     }
 
     function closingSequenceEnd(code) {
-      if (code === null || markdownLineEnding(code)) {
+      if (code === codes.eof || markdownLineEnding(code)) {
         effects.exit('directiveContainerFence')
         return ok(code)
       }

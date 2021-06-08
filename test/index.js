@@ -1,7 +1,7 @@
 import test from 'tape'
 import {micromark} from 'micromark'
 import {htmlVoidElements} from 'html-void-elements'
-import {directive as syntax, directiveHtml as html} from '../index.js'
+import {directive as syntax, directiveHtml as html} from '../dev/index.js'
 
 const own = {}.hasOwnProperty
 

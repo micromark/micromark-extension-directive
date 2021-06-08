@@ -1,3 +1,6 @@
+import assert from 'assert'
+import {codes} from 'micromark-util-symbol/codes.js'
+import {types} from 'micromark-util-symbol/types.js'
 import {factoryAttributes} from './factory-attributes.js'
 import {factoryLabel} from './factory-label.js'
 import {factoryName} from './factory-name.js'
@@ -13,8 +16,8 @@ const attributes = {tokenize: tokenizeAttributes, partial: true}
 function previous(code) {
   // If there is a previous code, there will always be a tail.
   return (
-    code !== 58 /* `:` */ ||
-    this.events[this.events.length - 1][1].type === 'characterEscape'
+    code !== codes.colon ||
+    this.events[this.events.length - 1][1].type === types.characterEscape
   )
 }
 
@@ -24,14 +27,8 @@ function tokenizeDirectiveText(effects, ok, nok) {
   return start
 
   function start(code) {
-    /* istanbul ignore if - handled by mm */
-    if (code !== 58 /* `:` */) throw new Error('expected `:`')
-
-    /* istanbul ignore if - handled by mm */
-    if (!previous.call(self, self.previous)) {
-      throw new Error('expected correct previous')
-    }
-
+    assert(code === codes.colon, 'expected `:`')
+    assert(previous.call(self, self.previous), 'expected correct previous')
     effects.enter('directiveText')
     effects.enter('directiveTextMarker')
     effects.consume(code)
@@ -40,15 +37,15 @@ function tokenizeDirectiveText(effects, ok, nok) {
   }
 
   function afterName(code) {
-    return code === 58 /* `:` */
+    return code === codes.colon
       ? nok(code)
-      : code === 91 /* `[` */
+      : code === codes.leftSquareBracket
       ? effects.attempt(label, afterLabel, afterLabel)(code)
       : afterLabel(code)
   }
 
   function afterLabel(code) {
-    return code === 123 /* `{` */
+    return code === codes.leftCurlyBrace
       ? effects.attempt(attributes, afterAttributes, afterAttributes)(code)
       : afterAttributes(code)
   }

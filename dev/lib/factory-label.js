@@ -1,4 +1,8 @@
+import assert from 'assert'
 import {markdownLineEnding} from 'micromark-util-character'
+import {codes} from 'micromark-util-symbol/codes.js'
+import {constants} from 'micromark-util-symbol/constants.js'
+import {types} from 'micromark-util-symbol/types.js'
 
 // This is a fork of:
 // <https://github.com/micromark/micromark/blob/bf53bf9/lib/tokenize/factory-label.js>
@@ -21,8 +25,7 @@ export function factoryLabel(
   return start
 
   function start(code) {
-    /* istanbul ignore if - always `[` */
-    if (code !== 91 /* `[` */) throw new Error('expected `[`')
+    assert(code === codes.leftSquareBracket, 'expected `[`')
     effects.enter(type)
     effects.enter(markerType)
     effects.consume(code)
@@ -31,7 +34,7 @@ export function factoryLabel(
   }
 
   function afterStart(code) {
-    if (code === 93 /* `]` */) {
+    if (code === codes.rightSquareBracket) {
       effects.enter(markerType)
       effects.consume(code)
       effects.exit(markerType)
@@ -44,15 +47,11 @@ export function factoryLabel(
   }
 
   function atBreak(code) {
-    if (
-      code === null /* EOF */ ||
-      /* <https://github.com/micromark/micromark/blob/bf53bf9/lib/constant/constants.js#L34> */
-      size > 999
-    ) {
+    if (code === codes.eof || size > constants.linkReferenceSizeMax) {
       return nok(code)
     }
 
-    if (code === 93 /* `]` */ && !balance--) {
+    if (code === codes.rightSquareBracket && !balance--) {
       return atClosingBrace(code)
     }
 
@@ -61,38 +60,40 @@ export function factoryLabel(
         return nok(code)
       }
 
-      effects.enter('lineEnding')
+      effects.enter(types.lineEnding)
       effects.consume(code)
-      effects.exit('lineEnding')
+      effects.exit(types.lineEnding)
       return atBreak
     }
 
-    effects.enter('chunkText', {contentType: 'text'})
+    effects.enter(types.chunkText, {contentType: constants.contentTypeText})
     return label(code)
   }
 
   function label(code) {
     if (
-      code === null /* EOF */ ||
+      code === codes.eof ||
       markdownLineEnding(code) ||
-      /* <https://github.com/micromark/micromark/blob/bf53bf9/lib/constant/constants.js#L34> */
-      size > 999
+      size > constants.linkReferenceSizeMax
     ) {
-      effects.exit('chunkText')
+      effects.exit(types.chunkText)
       return atBreak(code)
     }
 
-    if (code === 91 /* `[` */ && ++balance > 3) {
+    if (
+      code === codes.leftSquareBracket &&
+      ++balance > constants.linkResourceDestinationBalanceMax
+    ) {
       return nok(code)
     }
 
-    if (code === 93 /* `]` */ && !balance--) {
-      effects.exit('chunkText')
+    if (code === codes.rightSquareBracket && !balance--) {
+      effects.exit(types.chunkText)
       return atClosingBrace(code)
     }
 
     effects.consume(code)
-    return code === 92 /* `\` */ ? labelEscape : label
+    return code === codes.backslash ? labelEscape : label
   }
 
   function atClosingBrace(code) {
@@ -106,9 +107,9 @@ export function factoryLabel(
 
   function labelEscape(code) {
     if (
-      code === 91 /* `[` */ ||
-      code === 92 /* `\` */ ||
-      code === 93 /* `]` */
+      code === codes.leftSquareBracket ||
+      code === codes.backslash ||
+      code === codes.rightSquareBracket
     ) {
       effects.consume(code)
       size++

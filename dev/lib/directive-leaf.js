@@ -1,12 +1,13 @@
+import assert from 'assert'
 import {factorySpace} from 'micromark-factory-space'
 import {markdownLineEnding} from 'micromark-util-character'
+import {codes} from 'micromark-util-symbol/codes.js'
+import {types} from 'micromark-util-symbol/types.js'
 import {factoryAttributes} from './factory-attributes.js'
 import {factoryLabel} from './factory-label.js'
 import {factoryName} from './factory-name.js'
 
-export const directiveLeaf = {
-  tokenize: tokenizeDirectiveLeaf
-}
+export const directiveLeaf = {tokenize: tokenizeDirectiveLeaf}
 
 const label = {tokenize: tokenizeLabel, partial: true}
 const attributes = {tokenize: tokenizeAttributes, partial: true}
@@ -17,9 +18,7 @@ function tokenizeDirectiveLeaf(effects, ok, nok) {
   return start
 
   function start(code) {
-    /* istanbul ignore if - handled by mm */
-    if (code !== 58 /* `:` */) throw new Error('expected `:`')
-
+    assert(code === codes.colon, 'expected `:`')
     effects.enter('directiveLeaf')
     effects.enter('directiveLeafSequence')
     effects.consume(code)
@@ -27,7 +26,7 @@ function tokenizeDirectiveLeaf(effects, ok, nok) {
   }
 
   function inStart(code) {
-    if (code === 58 /* `:` */) {
+    if (code === codes.colon) {
       effects.consume(code)
       effects.exit('directiveLeafSequence')
       return factoryName.call(
@@ -43,23 +42,23 @@ function tokenizeDirectiveLeaf(effects, ok, nok) {
   }
 
   function afterName(code) {
-    return code === 91 /* `[` */
+    return code === codes.leftSquareBracket
       ? effects.attempt(label, afterLabel, afterLabel)(code)
       : afterLabel(code)
   }
 
   function afterLabel(code) {
-    return code === 123 /* `{` */
+    return code === codes.leftCurlyBrace
       ? effects.attempt(attributes, afterAttributes, afterAttributes)(code)
       : afterAttributes(code)
   }
 
   function afterAttributes(code) {
-    return factorySpace(effects, end, 'whitespace')(code)
+    return factorySpace(effects, end, types.whitespace)(code)
   }
 
   function end(code) {
-    if (code === null || markdownLineEnding(code)) {
+    if (code === codes.eof || markdownLineEnding(code)) {
       effects.exit('directiveLeaf')
       return ok(code)
     }
