@@ -710,6 +710,18 @@ test('micromark-extension-directive (syntax)', (t) => {
       'should support a thematic break before a leaf'
     )
 
+    t.equal(
+      micromark('> ::a\nb', options({'*': h})),
+      '<blockquote><a></a>\n</blockquote>\n<p>b</p>',
+      'should not support lazyness (1)'
+    )
+
+    t.equal(
+      micromark('> a\n::b', options({'*': h})),
+      '<blockquote>\n<p>a</p>\n</blockquote>\n<b></b>',
+      'should not support lazyness (2)'
+    )
+
     t.end()
   })
 
@@ -1032,7 +1044,7 @@ test('micromark-extension-directive (syntax)', (t) => {
 
     t.equal(
       micromark('>a\n:::a\nb', options()),
-      '<blockquote>\n<p>a</p>\n</blockquote>',
+      '<blockquote>\n<p>a</p>\n</blockquote>\n',
       'should support a block quote before a container'
     )
 
@@ -1074,7 +1086,7 @@ test('micromark-extension-directive (syntax)', (t) => {
 
     t.equal(
       micromark('* a\n:::a\nb', options()),
-      '<ul>\n<li>a</li>\n</ul>',
+      '<ul>\n<li>a</li>\n</ul>\n',
       'should support a list before a container'
     )
 
@@ -1112,6 +1124,30 @@ test('micromark-extension-directive (syntax)', (t) => {
       micromark(' :::x\n - a\n > b\n :::', options({'*': h})),
       '<x>\n<ul>\n<li>a</li>\n</ul>\n<blockquote>\n<p>b</p>\n</blockquote>\n</x>',
       'should support prefixed containers (4)'
+    )
+
+    t.equal(
+      micromark('> :::a\nb', options({'*': h})),
+      '<blockquote><a></a>\n</blockquote>\n<p>b</p>',
+      'should not support lazyness (1)'
+    )
+
+    t.equal(
+      micromark('> :::a\n> b\nc', options({'*': h})),
+      '<blockquote><a>\n<p>b</p>\n</a>\n</blockquote>\n<p>c</p>',
+      'should not support lazyness (2)'
+    )
+
+    t.equal(
+      micromark('> a\n:::b', options({'*': h})),
+      '<blockquote>\n<p>a</p>\n</blockquote>\n<b></b>',
+      'should not support lazyness (3)'
+    )
+
+    t.equal(
+      micromark('> :::a\n:::', options({'*': h})),
+      '<blockquote><a></a>\n</blockquote>\n<p>:::</p>',
+      'should not support lazyness (4)'
     )
 
     t.end()

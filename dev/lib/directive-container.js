@@ -23,6 +23,7 @@ export const directiveContainer = {
 
 const label = {tokenize: tokenizeLabel, partial: true}
 const attributes = {tokenize: tokenizeAttributes, partial: true}
+const nonLazyLine = {tokenize: tokenizeNonLazyLine, partial: true}
 
 /** @type {Tokenizer} */
 function tokenizeDirectiveContainer(effects, ok, nok) {
@@ -93,18 +94,24 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
     effects.exit('directiveContainerFence')
 
     if (code === codes.eof) {
-      effects.exit('directiveContainer')
-      return ok(code)
+      return afterOpening(code)
     }
 
     if (markdownLineEnding(code)) {
-      effects.enter(types.lineEnding)
-      effects.consume(code)
-      effects.exit(types.lineEnding)
-      return self.interrupt ? ok : contentStart
+      if (self.interrupt) {
+        return ok(code)
+      }
+
+      return effects.attempt(nonLazyLine, contentStart, afterOpening)(code)
     }
 
     return nok(code)
+  }
+
+  /** @type {State} */
+  function afterOpening(code) {
+    effects.exit('directiveContainer')
+    return ok(code)
   }
 
   /** @type {State} */
@@ -157,14 +164,26 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
     }
 
     if (markdownLineEnding(code)) {
-      effects.consume(code)
-      const t = effects.exit(types.chunkDocument)
-      self.parser.lazy[t.start.line] = false
-      return lineStart
+      return effects.check(nonLazyLine, nonLazyLineAfter, lineAfter)(code)
     }
 
     effects.consume(code)
     return contentContinue
+  }
+
+  /** @type {State} */
+  function nonLazyLineAfter(code) {
+    effects.consume(code)
+    const t = effects.exit(types.chunkDocument)
+    self.parser.lazy[t.start.line] = false
+    return lineStart
+  }
+
+  /** @type {State} */
+  function lineAfter(code) {
+    const t = effects.exit(types.chunkDocument)
+    self.parser.lazy[t.start.line] = false
+    return after(code)
   }
 
   /** @type {State} */
@@ -251,4 +270,25 @@ function tokenizeAttributes(effects, ok, nok) {
     'directiveContainerAttributeValueData',
     true
   )
+}
+
+/** @type {Tokenizer} */
+function tokenizeNonLazyLine(effects, ok, nok) {
+  const self = this
+
+  return start
+
+  /** @type {State} */
+  function start(code) {
+    assert(markdownLineEnding(code), 'expected eol')
+    effects.enter(types.lineEnding)
+    effects.consume(code)
+    effects.exit(types.lineEnding)
+    return lineStart
+  }
+
+  /** @type {State} */
+  function lineStart(code) {
+    return self.parser.lazy[self.now().line] ? nok(code) : ok(code)
+  }
 }
