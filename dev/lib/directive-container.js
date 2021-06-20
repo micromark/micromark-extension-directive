@@ -139,8 +139,8 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
       return after(code)
     }
 
-    const token = effects.enter('chunkDocument', {
-      contentType: 'document',
+    const token = effects.enter(types.chunkDocument, {
+      contentType: constants.contentTypeDocument,
       previous
     })
     if (previous) previous.next = token
@@ -151,13 +151,15 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
   /** @type {State} */
   function contentContinue(code) {
     if (code === codes.eof) {
-      effects.exit('chunkDocument')
+      const t = effects.exit(types.chunkDocument)
+      self.parser.lazy[t.start.line] = false
       return after(code)
     }
 
     if (markdownLineEnding(code)) {
       effects.consume(code)
-      effects.exit('chunkDocument')
+      const t = effects.exit(types.chunkDocument)
+      self.parser.lazy[t.start.line] = false
       return lineStart
     }
 

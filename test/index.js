@@ -1032,7 +1032,7 @@ test('micromark-extension-directive (syntax)', (t) => {
 
     t.equal(
       micromark('>a\n:::a\nb', options()),
-      '<blockquote>\n<p>a</p>\n</blockquote>\n',
+      '<blockquote>\n<p>a</p>\n</blockquote>',
       'should support a block quote before a container'
     )
 
@@ -1074,7 +1074,7 @@ test('micromark-extension-directive (syntax)', (t) => {
 
     t.equal(
       micromark('* a\n:::a\nb', options()),
-      '<ul>\n<li>a</li>\n</ul>\n',
+      '<ul>\n<li>a</li>\n</ul>',
       'should support a list before a container'
     )
 
@@ -1369,6 +1369,12 @@ test('content', (t) => {
     micromark(':::section{}\n* a\n:::', options({'*': h})),
     '<section>\n<ul>\n<li>a</li>\n</ul>\n</section>',
     'should support lists w/ attribute braces in container directives'
+  )
+
+  t.equal(
+    micromark(':::i\n- +\na', options()),
+    '',
+    'should support lazy containers in an unclosed container directive'
   )
 
   t.end()
