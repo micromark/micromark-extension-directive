@@ -22,7 +22,7 @@
  */
 
 import assert from 'assert'
-import {decodeEntity} from 'parse-entities/decode-entity.js'
+import {parseEntities} from 'parse-entities'
 
 const own = {}.hasOwnProperty
 
@@ -131,7 +131,7 @@ export function directiveHtml(options = {}) {
     /** @type {Attribute[]} */
     // @ts-expect-error
     const attributes = this.getData('directiveAttributes')
-    attributes.push(['id', decodeLight(this.sliceSerialize(token))])
+    attributes.push(['id', parseEntities(this.sliceSerialize(token))])
   }
 
   /** @type {_Handle} */
@@ -140,7 +140,7 @@ export function directiveHtml(options = {}) {
     // @ts-expect-error
     const attributes = this.getData('directiveAttributes')
 
-    attributes.push(['class', decodeLight(this.sliceSerialize(token))])
+    attributes.push(['class', parseEntities(this.sliceSerialize(token))])
   }
 
   /** @type {_Handle} */
@@ -159,7 +159,7 @@ export function directiveHtml(options = {}) {
     /** @type {Attribute[]} */
     // @ts-expect-error
     const attributes = this.getData('directiveAttributes')
-    attributes[attributes.length - 1][1] = decodeLight(
+    attributes[attributes.length - 1][1] = parseEntities(
       this.sliceSerialize(token)
     )
   }
@@ -239,24 +239,4 @@ export function directiveHtml(options = {}) {
       this.setData('slurpOneLineEnding', true)
     }
   }
-}
-
-/**
- * @param {string} value
- * @returns {string}
- */
-function decodeLight(value) {
-  return value.replace(
-    /&(#(\d{1,7}|x[\da-f]{1,6})|[\da-z]{1,31});/gi,
-    decodeIfPossible
-  )
-}
-
-/**
- * @param {string} $0
- * @param {string} $1
- * @returns {string}
- */
-function decodeIfPossible($0, $1) {
-  return decodeEntity($1) || $0
 }
