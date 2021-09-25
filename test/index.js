@@ -1372,7 +1372,7 @@ test('content', (t) => {
   )
 
   t.equal(
-    micromark('::::div{.big}\n:::div{.small}\nText', options({'*': h})),
+    micromark(':::div{.big}\n:::div{.small}\nText', options({'*': h})),
     '<div class="big">\n<div class="small">\n<p>Text</p>\n</div>\n</div>',
     'should support container directives in container directives'
   )
