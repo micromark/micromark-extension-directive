@@ -21,7 +21,7 @@
  * @typedef {Record<string, Handle>} HtmlOptions
  */
 
-import assert from 'power-assert'
+import {ok as assert} from 'uvu/assert'
 import {parseEntities} from 'parse-entities'
 
 const own = {}.hasOwnProperty

@@ -4,7 +4,7 @@
  * @typedef {import('micromark-util-types').Code} Code
  */
 
-import assert from 'power-assert'
+import {ok as assert} from 'uvu/assert'
 import {factorySpace} from 'micromark-factory-space'
 import {factoryWhitespace} from 'micromark-factory-whitespace'
 import {
