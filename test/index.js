@@ -1252,15 +1252,21 @@ test('content', (t) => {
   )
 
   t.equal(
-    micromark(':abbr[a[b[c[d]e]f]g]h', options({abbr})),
-    '<p><abbr>a[b[c[d]e]f]g</abbr>h</p>',
-    'should support balanced brackets in a label, three levels deep'
+    micromark(
+      ':abbr[1[2[3[4[5[6[7[8[9[10[11[12[13[14[15[16[17[18[19[20[21[22[23[24[25[26[27[28[29[30[31[32[x]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]',
+      options({abbr})
+    ),
+    '<p><abbr>1[2[3[4[5[6[7[8[9[10[11[12[13[14[15[16[17[18[19[20[21[22[23[24[25[26[27[28[29[30[31[32[x]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]</abbr></p>',
+    'should support balanced brackets in a label, 32 levels deep'
   )
 
   t.equal(
-    micromark(':abbr[a[b[c[d[e]f]g]h]i]j', options({abbr})),
-    '<p><abbr></abbr>[a[b[c[d[e]f]g]h]i]j</p>',
-    'should *not* support balanced brackets in a label, four levels deep'
+    micromark(
+      ':abbr[1[2[3[4[5[6[7[8[9[10[11[12[13[14[15[16[17[18[19[20[21[22[23[24[25[26[27[28[29[30[31[32[33[x]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]',
+      options({abbr})
+    ),
+    '<p><abbr></abbr>[1[2[3[4[5[6[7[8[9[10[11[12[13[14[15[16[17[18[19[20[21[22[23[24[25[26[27[28[29[30[31[32[33[x]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]</p>',
+    'should *not* support balanced brackets in a label, 33 levels deep'
   )
 
   t.equal(
