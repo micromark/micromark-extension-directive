@@ -1,6 +1,7 @@
 /**
  * @typedef {import('micromark-util-types').Effects} Effects
  * @typedef {import('micromark-util-types').State} State
+ * @typedef {import('micromark-util-types').Token} Token
  */
 
 import {ok as assert} from 'uvu/assert'
@@ -35,6 +36,8 @@ export function factoryLabel(
 ) {
   let size = 0
   let balance = 0
+  /** @type {Token|undefined} */
+  let previous
 
   return start
 
@@ -59,43 +62,28 @@ export function factoryLabel(
     }
 
     effects.enter(stringType)
-    return atBreak(code)
+    return lineStart(code)
   }
 
   /** @type {State} */
-  function atBreak(code) {
-    if (code === codes.eof || size > constants.linkReferenceSizeMax) {
-      return nok(code)
-    }
-
-    if (code === codes.rightSquareBracket && !balance--) {
+  function lineStart(code) {
+    if (code === codes.rightSquareBracket && !balance) {
       return atClosingBrace(code)
     }
 
-    if (markdownLineEnding(code)) {
-      if (disallowEol) {
-        return nok(code)
-      }
-
-      effects.enter(types.lineEnding)
-      effects.consume(code)
-      effects.exit(types.lineEnding)
-      return atBreak
-    }
-
-    effects.enter(types.chunkText, {contentType: constants.contentTypeText})
-    return label(code)
+    const token = effects.enter(types.chunkText, {
+      contentType: constants.contentTypeText,
+      previous
+    })
+    if (previous) previous.next = token
+    previous = token
+    return data(code)
   }
 
   /** @type {State} */
-  function label(code) {
-    if (
-      code === codes.eof ||
-      markdownLineEnding(code) ||
-      size > constants.linkReferenceSizeMax
-    ) {
-      effects.exit(types.chunkText)
-      return atBreak(code)
+  function data(code) {
+    if (code === codes.eof || size > constants.linkReferenceSizeMax) {
+      return nok(code)
     }
 
     if (
@@ -110,8 +98,33 @@ export function factoryLabel(
       return atClosingBrace(code)
     }
 
+    if (markdownLineEnding(code)) {
+      if (disallowEol) {
+        return nok(code)
+      }
+
+      effects.consume(code)
+      effects.exit(types.chunkText)
+      return lineStart
+    }
+
     effects.consume(code)
-    return code === codes.backslash ? labelEscape : label
+    return code === codes.backslash ? dataEscape : data
+  }
+
+  /** @type {State} */
+  function dataEscape(code) {
+    if (
+      code === codes.leftSquareBracket ||
+      code === codes.backslash ||
+      code === codes.rightSquareBracket
+    ) {
+      effects.consume(code)
+      size++
+      return data
+    }
+
+    return data(code)
   }
 
   /** @type {State} */
@@ -122,20 +135,5 @@ export function factoryLabel(
     effects.exit(markerType)
     effects.exit(type)
     return ok
-  }
-
-  /** @type {State} */
-  function labelEscape(code) {
-    if (
-      code === codes.leftSquareBracket ||
-      code === codes.backslash ||
-      code === codes.rightSquareBracket
-    ) {
-      effects.consume(code)
-      size++
-      return label
-    }
-
-    return label(code)
   }
 }

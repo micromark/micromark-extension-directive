@@ -1278,7 +1278,43 @@ test('content', (t) => {
   t.equal(
     micromark(':abbr[\na\r]', options({abbr})),
     '<p><abbr>\na\r</abbr></p>',
-    'should support EOLs at the edges of a label'
+    'should support EOLs at the edges of a label (1)'
+  )
+
+  t.equal(
+    micromark(':abbr[\n]', options({abbr})),
+    '<p><abbr>\n</abbr></p>',
+    'should support EOLs at the edges of a label (2)'
+  )
+
+  t.equal(
+    micromark(':abbr[a\n:abbr[b]\nc]', options({abbr})),
+    '<p><abbr>a\n<abbr>b</abbr>\nc</abbr></p>',
+    'should support EOLs around nested directives'
+  )
+
+  t.equal(
+    micromark(':abbr[:abbr[\n]]', options({abbr})),
+    '<p><abbr><abbr>\n</abbr></abbr></p>',
+    'should support EOLs inside nested directives (1)'
+  )
+
+  t.equal(
+    micromark(':abbr[:abbr[a\nb]]', options({abbr})),
+    '<p><abbr><abbr>a\nb</abbr></abbr></p>',
+    'should support EOLs inside nested directives (2)'
+  )
+
+  t.equal(
+    micromark(':abbr[:abbr[\nb\n]]', options({abbr})),
+    '<p><abbr><abbr>\nb\n</abbr></abbr></p>',
+    'should support EOLs inside nested directives (3)'
+  )
+
+  t.equal(
+    micromark(':abbr[:abbr[\\\n]]', options({abbr})),
+    '<p><abbr><abbr><br />\n</abbr></abbr></p>',
+    'should support EOLs inside nested directives (4)'
   )
 
   t.equal(
