@@ -131,7 +131,12 @@ export function directiveHtml(options = {}) {
     /** @type {Attribute[]} */
     // @ts-expect-error
     const attributes = this.getData('directiveAttributes')
-    attributes.push(['id', parseEntities(this.sliceSerialize(token))])
+    attributes.push([
+      'id',
+      parseEntities(this.sliceSerialize(token), {
+        attribute: true
+      })
+    ])
   }
 
   /** @type {_Handle} */
@@ -140,7 +145,12 @@ export function directiveHtml(options = {}) {
     // @ts-expect-error
     const attributes = this.getData('directiveAttributes')
 
-    attributes.push(['class', parseEntities(this.sliceSerialize(token))])
+    attributes.push([
+      'class',
+      parseEntities(this.sliceSerialize(token), {
+        attribute: true
+      })
+    ])
   }
 
   /** @type {_Handle} */
@@ -160,7 +170,8 @@ export function directiveHtml(options = {}) {
     // @ts-expect-error
     const attributes = this.getData('directiveAttributes')
     attributes[attributes.length - 1][1] = parseEntities(
-      this.sliceSerialize(token)
+      this.sliceSerialize(token),
+      {attribute: true}
     )
   }
 

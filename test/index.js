@@ -1348,6 +1348,24 @@ test('content', (t) => {
   )
 
   t.equal(
+    micromark(':a{href=&param}', options({'*': h})),
+    '<p><a href="&amp;param"></a></p>',
+    'should not support non-terminated character references in unquoted attribute values'
+  )
+
+  t.equal(
+    micromark(':a{href="&param"}', options({'*': h})),
+    '<p><a href="&amp;param"></a></p>',
+    'should not support non-terminated character references in double quoted attribute values'
+  )
+
+  t.equal(
+    micromark(":a{href='&param'}", options({'*': h})),
+    '<p><a href="&amp;param"></a></p>',
+    'should not support non-terminated character references in single quoted attribute values'
+  )
+
+  t.equal(
     micromark(':span{a\nb}', options({'*': h})),
     '<p><span a="" b=""></span></p>',
     'should support EOLs between attributes'
