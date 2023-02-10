@@ -2,6 +2,7 @@
  * @typedef {import('micromark-util-types').Construct} Construct
  * @typedef {import('micromark-util-types').Tokenizer} Tokenizer
  * @typedef {import('micromark-util-types').Previous} Previous
+ * @typedef {import('micromark-util-types').TokenizeContext} TokenizeContext
  * @typedef {import('micromark-util-types').State} State
  */
 
@@ -21,7 +22,10 @@ export const directiveText = {
 const label = {tokenize: tokenizeLabel, partial: true}
 const attributes = {tokenize: tokenizeAttributes, partial: true}
 
-/** @type {Previous} */
+/**
+ * @this {TokenizeContext}
+ * @type {Previous}
+ */
 function previous(code) {
   // If there is a previous code, there will always be a tail.
   return (
@@ -30,7 +34,10 @@ function previous(code) {
   )
 }
 
-/** @type {Tokenizer} */
+/**
+ * @this {TokenizeContext}
+ * @type {Tokenizer}
+ */
 function tokenizeDirectiveText(effects, ok, nok) {
   const self = this
 

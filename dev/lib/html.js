@@ -98,7 +98,10 @@ export function directiveHtml(options = {}) {
     stack.push({type, name: ''})
   }
 
-  /** @type {_Handle} */
+  /**
+   * @this {CompileContext}
+   * @type {_Handle}
+   */
   function exitName(token) {
     /** @type {Directive[]} */
     // @ts-expect-error
@@ -106,12 +109,18 @@ export function directiveHtml(options = {}) {
     stack[stack.length - 1].name = this.sliceSerialize(token)
   }
 
-  /** @type {_Handle} */
+  /**
+   * @this {CompileContext}
+   * @type {_Handle}
+   */
   function enterLabel() {
     this.buffer()
   }
 
-  /** @type {_Handle} */
+  /**
+   * @this {CompileContext}
+   * @type {_Handle}
+   */
   function exitLabel() {
     const data = this.resume()
     /** @type {Directive[]} */
@@ -120,13 +129,19 @@ export function directiveHtml(options = {}) {
     stack[stack.length - 1].label = data
   }
 
-  /** @type {_Handle} */
+  /**
+   * @this {CompileContext}
+   * @type {_Handle}
+   */
   function enterAttributes() {
     this.buffer()
     this.setData('directiveAttributes', [])
   }
 
-  /** @type {_Handle} */
+  /**
+   * @this {CompileContext}
+   * @type {_Handle}
+   */
   function exitAttributeIdValue(token) {
     /** @type {Attribute[]} */
     // @ts-expect-error
@@ -139,7 +154,10 @@ export function directiveHtml(options = {}) {
     ])
   }
 
-  /** @type {_Handle} */
+  /**
+   * @this {CompileContext}
+   * @type {_Handle}
+   */
   function exitAttributeClassValue(token) {
     /** @type {Attribute[]} */
     // @ts-expect-error
@@ -153,7 +171,10 @@ export function directiveHtml(options = {}) {
     ])
   }
 
-  /** @type {_Handle} */
+  /**
+   * @this {CompileContext}
+   * @type {_Handle}
+   */
   function exitAttributeName(token) {
     // Attribute names in CommonMark are significantly limited, so character
     // references can’t exist.
@@ -164,7 +185,10 @@ export function directiveHtml(options = {}) {
     attributes.push([this.sliceSerialize(token), ''])
   }
 
-  /** @type {_Handle} */
+  /**
+   * @this {CompileContext}
+   * @type {_Handle}
+   */
   function exitAttributeValue(token) {
     /** @type {Attribute[]} */
     // @ts-expect-error
@@ -175,7 +199,10 @@ export function directiveHtml(options = {}) {
     )
   }
 
-  /** @type {_Handle} */
+  /**
+   * @this {CompileContext}
+   * @type {_Handle}
+   */
   function exitAttributes() {
     /** @type {Directive[]} */
     // @ts-expect-error
@@ -204,7 +231,10 @@ export function directiveHtml(options = {}) {
     stack[stack.length - 1].attributes = cleaned
   }
 
-  /** @type {_Handle} */
+  /**
+   * @this {CompileContext}
+   * @type {_Handle}
+   */
   function exitContainerContent() {
     const data = this.resume()
     /** @type {Directive[]} */
@@ -213,7 +243,10 @@ export function directiveHtml(options = {}) {
     stack[stack.length - 1].content = data
   }
 
-  /** @type {_Handle} */
+  /**
+   * @this {CompileContext}
+   * @type {_Handle}
+   */
   function exitContainerFence() {
     /** @type {Directive[]} */
     // @ts-expect-error
@@ -224,7 +257,10 @@ export function directiveHtml(options = {}) {
     if (directive._fenceCount === 1) this.setData('slurpOneLineEnding', true)
   }
 
-  /** @type {_Handle} */
+  /**
+   * @this {CompileContext}
+   * @type {_Handle}
+   */
   function exit() {
     /** @type {Directive} */
     // @ts-expect-error

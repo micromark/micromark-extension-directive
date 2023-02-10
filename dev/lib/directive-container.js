@@ -1,6 +1,7 @@
 /**
  * @typedef {import('micromark-util-types').Construct} Construct
  * @typedef {import('micromark-util-types').Tokenizer} Tokenizer
+ * @typedef {import('micromark-util-types').TokenizeContext} TokenizeContext
  * @typedef {import('micromark-util-types').State} State
  * @typedef {import('micromark-util-types').Token} Token
  */
@@ -25,7 +26,10 @@ const label = {tokenize: tokenizeLabel, partial: true}
 const attributes = {tokenize: tokenizeAttributes, partial: true}
 const nonLazyLine = {tokenize: tokenizeNonLazyLine, partial: true}
 
-/** @type {Tokenizer} */
+/**
+ * @this {TokenizeContext}
+ * @type {Tokenizer}
+ */
 function tokenizeDirectiveContainer(effects, ok, nok) {
   const self = this
   const tail = self.events[self.events.length - 1]
@@ -272,7 +276,10 @@ function tokenizeAttributes(effects, ok, nok) {
   )
 }
 
-/** @type {Tokenizer} */
+/**
+ * @this {TokenizeContext}
+ * @type {Tokenizer}
+ */
 function tokenizeNonLazyLine(effects, ok, nok) {
   const self = this
 

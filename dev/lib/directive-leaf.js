@@ -1,6 +1,7 @@
 /**
  * @typedef {import('micromark-util-types').Construct} Construct
  * @typedef {import('micromark-util-types').Tokenizer} Tokenizer
+ * @typedef {import('micromark-util-types').TokenizeContext} TokenizeContext
  * @typedef {import('micromark-util-types').State} State
  */
 
@@ -19,7 +20,10 @@ export const directiveLeaf = {tokenize: tokenizeDirectiveLeaf}
 const label = {tokenize: tokenizeLabel, partial: true}
 const attributes = {tokenize: tokenizeAttributes, partial: true}
 
-/** @type {Tokenizer} */
+/**
+ * @this {TokenizeContext}
+ * @type {Tokenizer}
+ */
 function tokenizeDirectiveLeaf(effects, ok, nok) {
   const self = this
 
