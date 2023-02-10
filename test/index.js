@@ -1,4 +1,5 @@
 /**
+ * @typedef {import('micromark-util-types').CompileContext} CompileContext
  * @typedef {import('../dev/index.js').HtmlOptions} HtmlOptions
  * @typedef {import('../dev/index.js').Handle} Handle
  */
@@ -1476,7 +1477,10 @@ test('content', (t) => {
   t.end()
 })
 
-/** @type {Handle} */
+/**
+ * @this {CompileContext}
+ * @type {Handle}
+ */
 function abbr(d) {
   if (d.type !== 'textDirective') return false
 
@@ -1491,7 +1495,10 @@ function abbr(d) {
   this.tag('</abbr>')
 }
 
-/** @type {Handle} */
+/**
+ * @this {CompileContext}
+ * @type {Handle}
+ */
 function youtube(d) {
   const attrs = d.attributes || {}
   const v = attrs.v
@@ -1526,7 +1533,10 @@ function youtube(d) {
   this.tag('</iframe>')
 }
 
-/** @type {Handle} */
+/**
+ * @this {CompileContext}
+ * @type {Handle}
+ */
 function h(d) {
   const content = d.content || d.label
   const attrs = d.attributes || {}
