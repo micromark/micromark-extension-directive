@@ -1,5 +1,6 @@
 /**
  * @typedef {import('micromark-util-types').Construct} Construct
+ * @typedef {import('micromark-util-types').TokenizeContext} TokenizeContext
  * @typedef {import('micromark-util-types').Tokenizer} Tokenizer
  * @typedef {import('micromark-util-types').Previous} Previous
  * @typedef {import('micromark-util-types').TokenizeContext} TokenizeContext
@@ -77,7 +78,10 @@ function tokenizeDirectiveText(effects, ok, nok) {
   }
 }
 
-/** @type {Tokenizer} */
+/**
+ * @this {TokenizeContext}
+ * @type {Tokenizer}
+ */
 function tokenizeLabel(effects, ok, nok) {
   // Always a `[`
   return factoryLabel(
@@ -90,7 +94,10 @@ function tokenizeLabel(effects, ok, nok) {
   )
 }
 
-/** @type {Tokenizer} */
+/**
+ * @this {TokenizeContext}
+ * @type {Tokenizer}
+ */
 function tokenizeAttributes(effects, ok, nok) {
   // Always a `{`
   return factoryAttributes(

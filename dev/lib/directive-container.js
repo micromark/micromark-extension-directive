@@ -4,6 +4,7 @@
  * @typedef {import('micromark-util-types').TokenizeContext} TokenizeContext
  * @typedef {import('micromark-util-types').State} State
  * @typedef {import('micromark-util-types').Token} Token
+ * @typedef {import('micromark-util-types').TokenizeContext} TokenizeContext
  */
 
 import {ok as assert} from 'uvu/assert'
@@ -197,7 +198,10 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
     return ok(code)
   }
 
-  /** @type {Tokenizer} */
+  /**
+   * @this {TokenizeContext}
+   * @type {Tokenizer}
+   */
   function tokenizeClosingFence(effects, ok, nok) {
     let size = 0
 
@@ -240,7 +244,10 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
   }
 }
 
-/** @type {Tokenizer} */
+/**
+ * @this {TokenizeContext}
+ * @type {Tokenizer}
+ */
 function tokenizeLabel(effects, ok, nok) {
   // Always a `[`
   return factoryLabel(
@@ -254,7 +261,10 @@ function tokenizeLabel(effects, ok, nok) {
   )
 }
 
-/** @type {Tokenizer} */
+/**
+ * @this {TokenizeContext}
+ * @type {Tokenizer}
+ */
 function tokenizeAttributes(effects, ok, nok) {
   // Always a `{`
   return factoryAttributes(
