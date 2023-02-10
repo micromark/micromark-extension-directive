@@ -2,7 +2,6 @@
  * @typedef {import('micromark-util-types').CompileContext} CompileContext
  * @typedef {import('../dev/index.js').HtmlOptions} HtmlOptions
  * @typedef {import('../dev/index.js').Handle} Handle
- * @typedef {import('micromark-util-types').CompileContext} CompileContext
  */
 
 import test from 'tape'
