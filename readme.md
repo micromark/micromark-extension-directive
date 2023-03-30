@@ -292,8 +292,8 @@ this implementation mimics CommonMark as closely as possible:
 ## Types
 
 This package is fully typed with [TypeScript][].
-It exports the additional types [`Handle`][api-handle] and
-[`HtmlOptions`][api-html-options].
+It exports the additional types [`Directive`][api-directive-type],
+[`Handle`][api-handle], and [`HtmlOptions`][api-html-options].
 
 ## Compatibility
 
