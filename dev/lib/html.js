@@ -1,22 +1,25 @@
 /**
- * @typedef {import('micromark-util-types').HtmlExtension} HtmlExtension
- * @typedef {import('micromark-util-types').Handle} _Handle
  * @typedef {import('micromark-util-types').CompileContext} CompileContext
+ * @typedef {import('micromark-util-types').Handle} _Handle
+ * @typedef {import('micromark-util-types').HtmlExtension} HtmlExtension
  */
 
 /**
  * @typedef {[string, string]} Attribute
- * @typedef {'containerDirective'|'leafDirective'|'textDirective'} DirectiveType
+ * @typedef {'containerDirective' | 'leafDirective' | 'textDirective'} DirectiveType
  *
  * @typedef Directive
  * @property {DirectiveType} type
  * @property {string} name
- * @property {string} [label]
- * @property {Record<string, string>} [attributes]
- * @property {string} [content]
- * @property {number} [_fenceCount]
+ * @property {string | undefined} [label]
+ * @property {Record<string, string> | undefined} [attributes]
+ * @property {string | undefined} [content]
+ * @property {number | undefined} [_fenceCount]
  *
- * @typedef {(this: CompileContext, directive: Directive) => boolean|void} Handle
+ * @callback Handle
+ * @param {CompileContext} this
+ * @param {Directive} directive
+ * @returns {boolean | void}
  *
  * @typedef {Record<string, Handle>} HtmlOptions
  */
@@ -27,10 +30,11 @@ import {parseEntities} from 'parse-entities'
 const own = {}.hasOwnProperty
 
 /**
- * @param {HtmlOptions} [options]
+ * @param {HtmlOptions | null | undefined} [options]
  * @returns {HtmlExtension}
  */
-export function directiveHtml(options = {}) {
+export function directiveHtml(options) {
+  const options_ = options || {}
   return {
     enter: {
       directiveContainer() {
@@ -143,7 +147,7 @@ export function directiveHtml(options = {}) {
    * @type {_Handle}
    */
   function exitAttributeIdValue(token) {
-    /** @type {Attribute[]} */
+    /** @type {Array<Attribute>} */
     // @ts-expect-error
     const attributes = this.getData('directiveAttributes')
     attributes.push([
@@ -159,7 +163,7 @@ export function directiveHtml(options = {}) {
    * @type {_Handle}
    */
   function exitAttributeClassValue(token) {
-    /** @type {Attribute[]} */
+    /** @type {Array<Attribute>} */
     // @ts-expect-error
     const attributes = this.getData('directiveAttributes')
 
@@ -178,7 +182,7 @@ export function directiveHtml(options = {}) {
   function exitAttributeName(token) {
     // Attribute names in CommonMark are significantly limited, so character
     // references can’t exist.
-    /** @type {Attribute[]} */
+    /** @type {Array<Attribute>} */
     // @ts-expect-error
     const attributes = this.getData('directiveAttributes')
 
@@ -190,7 +194,7 @@ export function directiveHtml(options = {}) {
    * @type {_Handle}
    */
   function exitAttributeValue(token) {
-    /** @type {Attribute[]} */
+    /** @type {Array<Attribute>} */
     // @ts-expect-error
     const attributes = this.getData('directiveAttributes')
     attributes[attributes.length - 1][1] = parseEntities(
@@ -207,7 +211,7 @@ export function directiveHtml(options = {}) {
     /** @type {Directive[]} */
     // @ts-expect-error
     const stack = this.getData('directiveStack')
-    /** @type {Attribute[]} */
+    /** @type {Array<Attribute>} */
     // @ts-expect-error
     const attributes = this.getData('directiveAttributes')
     /** @type {Directive['attributes']} */
@@ -272,13 +276,13 @@ export function directiveHtml(options = {}) {
 
     assert(directive.name, 'expected `name`')
 
-    if (own.call(options, directive.name)) {
-      result = options[directive.name].call(this, directive)
+    if (own.call(options_, directive.name)) {
+      result = options_[directive.name].call(this, directive)
       found = result !== false
     }
 
-    if (!found && own.call(options, '*')) {
-      result = options['*'].call(this, directive)
+    if (!found && own.call(options_, '*')) {
+      result = options_['*'].call(this, directive)
       found = result !== false
     }
 

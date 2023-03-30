@@ -1,7 +1,7 @@
 /**
- * @typedef {import('micromark-util-types').TokenizeContext} TokenizeContext
  * @typedef {import('micromark-util-types').Effects} Effects
  * @typedef {import('micromark-util-types').State} State
+ * @typedef {import('micromark-util-types').TokenizeContext} TokenizeContext
  */
 
 import {asciiAlpha, asciiAlphanumeric} from 'micromark-util-character'
