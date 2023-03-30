@@ -6,22 +6,40 @@
 
 /**
  * @typedef {[string, string]} Attribute
- * @typedef {'containerDirective' | 'leafDirective' | 'textDirective'} DirectiveType
- *
- * @typedef Directive
- * @property {DirectiveType} type
- * @property {string} name
- * @property {string | undefined} [label]
- * @property {Record<string, string> | undefined} [attributes]
- * @property {string | undefined} [content]
- * @property {number | undefined} [_fenceCount]
+ *   Internal tuple representing an attribute.
+ */
+
+/**
+ * @typedef {Record<string, Handle>} HtmlOptions
+ *   Configuration.
  *
  * @callback Handle
+ *   Handle a directive.
  * @param {CompileContext} this
+ *   Current context.
  * @param {Directive} directive
+ *   Directive.
  * @returns {boolean | void}
+ *   Signal that the directive could not be handled, in which case the fallback
+ *   is used (when given: a special handle for `'*'`).
  *
- * @typedef {Record<string, Handle>} HtmlOptions
+ * @typedef Directive
+ *   Structure representing a directive
+ * @property {DirectiveType} type
+ *   Kind.
+ * @property {string} name
+ *   Name of directive.
+ * @property {string | undefined} [label]
+ *   Compiled HTML content that was in `[brackets]`.
+ * @property {Record<string, string> | undefined} [attributes]
+ *   Object w/ HTML attributes.
+ * @property {string | undefined} [content]
+ *   Compiled HTML content inside container directive.
+ * @property {number | undefined} [_fenceCount]
+ *   Private :)
+ *
+ * @typedef {'containerDirective' | 'leafDirective' | 'textDirective'} DirectiveType
+ *   Kind.
  */
 
 import {ok as assert} from 'uvu/assert'
@@ -30,8 +48,14 @@ import {parseEntities} from 'parse-entities'
 const own = {}.hasOwnProperty
 
 /**
+ * Create an extension for `micromark` to support directives when serializing
+ * to HTML.
+ *
  * @param {HtmlOptions | null | undefined} [options]
+ *   Configuration.
  * @returns {HtmlExtension}
+ *   Extension for `micromark` that can be passed in `htmlExtensions`, to
+ *   support directives when serializing to HTML.
  */
 export function directiveHtml(options) {
   const options_ = options || {}

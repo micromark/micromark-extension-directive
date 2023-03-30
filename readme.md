@@ -116,7 +116,7 @@ be handled, in which case the fallback is used (when given).
 
 ### `Directive`
 
-An object representing a directive.
+Structure representing a directive.
 
 ###### Fields
 
