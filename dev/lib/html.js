@@ -13,6 +13,9 @@
  * @typedef {Record<string, Handle>} HtmlOptions
  *   Configuration.
  *
+ *   > 👉 **Note**: the special field `'*'` can be used to specify a fallback
+ *   > handle to handle all otherwise unhandled directives.
+ *
  * @callback Handle
  *   Handle a directive.
  * @param {CompileContext} this
@@ -20,11 +23,11 @@
  * @param {Directive} directive
  *   Directive.
  * @returns {boolean | void}
- *   Signal that the directive could not be handled, in which case the fallback
- *   is used (when given: a special handle for `'*'`).
+ *   Signal whether the directive was handled.
+ *   Yield `false` to let the fallback (a special handle for `'*'`) handle it.
  *
  * @typedef Directive
- *   Structure representing a directive
+ *   Structure representing a directive.
  * @property {DirectiveType} type
  *   Kind.
  * @property {string} name
