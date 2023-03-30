@@ -12,6 +12,14 @@ import {directive as syntax, directiveHtml as html} from '../dev/index.js'
 
 const own = {}.hasOwnProperty
 
+test('core', async () => {
+  assert.deepEqual(
+    Object.keys(await import('micromark-extension-directive')).sort(),
+    ['directive', 'directiveHtml'],
+    'should expose the public api'
+  )
+})
+
 test('micromark-extension-directive (syntax, text)', () => {
   assert.equal(
     micromark('\\:a', options()),
