@@ -211,9 +211,18 @@ type HtmlOptions = Record<string, Handle>
 
 ## Authoring
 
+When authoring markdown with directives, keep in mind that they don’t work in
+most places.
+On your own site it can be great!
+
 ## HTML
 
+You can define how directives are turned into HTML.
+If directives are not handled, they do not emit anything.
+
 ## CSS
+
+How to display directives is left as an exercise for the reader.
 
 ## Syntax
 
