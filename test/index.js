@@ -735,6 +735,12 @@ test('micromark-extension-directive (syntax, leaf)', () => {
     '<blockquote>\n<p>a</p>\n</blockquote>\n<b></b>',
     'should not support lazyness (2)'
   )
+
+  assert.equal(
+    micromark('::a:b{c=d}', options()),
+    '',
+    'should support a colon in a directive name'
+  )
 })
 
 test('micromark-extension-directive (syntax, container)', () => {
