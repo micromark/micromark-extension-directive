@@ -48,7 +48,7 @@
     "uvu": "^0.5.0"
   },
   "devDependencies": {
-    "@types/node": "^18.0.0",
+    "@types/node": "^20.0.0",
     "c8": "^7.0.0",
     "html-void-elements": "^2.0.0",
     "micromark": "^3.0.0",
@@ -56,10 +56,9 @@
     "prettier": "^2.0.0",
     "remark-cli": "^11.0.0",
     "remark-preset-wooorm": "^9.0.0",
-    "tape": "^5.0.0",
     "type-coverage": "^2.0.0",
     "typescript": "^5.0.0",
-    "xo": "^0.53.0"
+    "xo": "^0.54.0"
   },
   "scripts": {
     "prepack": "npm run build && npm run format",
