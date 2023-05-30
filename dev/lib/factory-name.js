@@ -2,6 +2,7 @@
  * @typedef {import('micromark-util-types').Effects} Effects
  * @typedef {import('micromark-util-types').State} State
  * @typedef {import('micromark-util-types').TokenizeContext} TokenizeContext
+ * @typedef {import('micromark-util-types').TokenType} TokenType
  */
 
 import {asciiAlpha, asciiAlphanumeric} from 'micromark-util-character'
@@ -12,7 +13,7 @@ import {codes} from 'micromark-util-symbol/codes.js'
  * @param {Effects} effects
  * @param {State} ok
  * @param {State} nok
- * @param {string} type
+ * @param {TokenType} type
  */
 export function factoryName(effects, ok, nok, type) {
   const self = this

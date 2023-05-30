@@ -2,6 +2,7 @@
  * @typedef {import('micromark-util-types').Code} Code
  * @typedef {import('micromark-util-types').Effects} Effects
  * @typedef {import('micromark-util-types').State} State
+ * @typedef {import('micromark-util-types').TokenType} TokenType
  */
 
 import {ok as assert} from 'uvu/assert'
@@ -21,17 +22,17 @@ import {types} from 'micromark-util-symbol/types.js'
  * @param {Effects} effects
  * @param {State} ok
  * @param {State} nok
- * @param {string} attributesType
- * @param {string} attributesMarkerType
- * @param {string} attributeType
- * @param {string} attributeIdType
- * @param {string} attributeClassType
- * @param {string} attributeNameType
- * @param {string} attributeInitializerType
- * @param {string} attributeValueLiteralType
- * @param {string} attributeValueType
- * @param {string} attributeValueMarker
- * @param {string} attributeValueData
+ * @param {TokenType} attributesType
+ * @param {TokenType} attributesMarkerType
+ * @param {TokenType} attributeType
+ * @param {TokenType} attributeIdType
+ * @param {TokenType} attributeClassType
+ * @param {TokenType} attributeNameType
+ * @param {TokenType} attributeInitializerType
+ * @param {TokenType} attributeValueLiteralType
+ * @param {TokenType} attributeValueType
+ * @param {TokenType} attributeValueMarker
+ * @param {TokenType} attributeValueData
  * @param {boolean} [disallowEol=false]
  */
 /* eslint-disable-next-line max-params */
@@ -52,9 +53,9 @@ export function factoryAttributes(
   attributeValueData,
   disallowEol
 ) {
-  /** @type {string} */
+  /** @type {TokenType} */
   let type
-  /** @type {Code|undefined} */
+  /** @type {Code | undefined} */
   let marker
 
   return start
@@ -101,11 +102,13 @@ export function factoryAttributes(
 
   /** @type {State} */
   function shortcutStart(code) {
+    // Assume it’s registered.
+    const markerType = /** @type {TokenType} */ (type + 'Marker')
     effects.enter(attributeType)
     effects.enter(type)
-    effects.enter(type + 'Marker')
+    effects.enter(markerType)
     effects.consume(code)
-    effects.exit(type + 'Marker')
+    effects.exit(markerType)
     return shortcutStartAfter
   }
 
@@ -127,7 +130,9 @@ export function factoryAttributes(
       return nok(code)
     }
 
-    effects.enter(type + 'Value')
+    // Assume it’s registered.
+    const valueType = /** @type {TokenType} */ (type + 'Value')
+    effects.enter(valueType)
     effects.consume(code)
     return shortcut
   }
@@ -152,7 +157,9 @@ export function factoryAttributes(
       code === codes.rightCurlyBrace ||
       markdownLineEndingOrSpace(code)
     ) {
-      effects.exit(type + 'Value')
+      // Assume it’s registered.
+      const valueType = /** @type {TokenType} */ (type + 'Value')
+      effects.exit(valueType)
       effects.exit(type)
       effects.exit(attributeType)
       return between(code)

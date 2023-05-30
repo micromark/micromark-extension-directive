@@ -1,5 +1,5 @@
 {
-  "include": ["**/*.js"],
+  "include": ["**/*.js", "dev/index.d.ts"],
   "exclude": ["coverage/", "lib/", "node_modules/", "index.js"],
   "compilerOptions": {
     "customConditions": ["development"],

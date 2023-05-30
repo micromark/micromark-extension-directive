@@ -122,8 +122,6 @@ export function directiveHtml(options) {
    * @param {DirectiveType} type
    */
   function enter(type) {
-    /** @type {Directive[]} */
-    // @ts-expect-error
     let stack = this.getData('directiveStack')
     if (!stack) this.setData('directiveStack', (stack = []))
     stack.push({type, name: ''})
@@ -134,9 +132,8 @@ export function directiveHtml(options) {
    * @type {_Handle}
    */
   function exitName(token) {
-    /** @type {Directive[]} */
-    // @ts-expect-error
     const stack = this.getData('directiveStack')
+    assert(stack, 'expected directive stack')
     stack[stack.length - 1].name = this.sliceSerialize(token)
   }
 
@@ -154,9 +151,8 @@ export function directiveHtml(options) {
    */
   function exitLabel() {
     const data = this.resume()
-    /** @type {Directive[]} */
-    // @ts-expect-error
     const stack = this.getData('directiveStack')
+    assert(stack, 'expected directive stack')
     stack[stack.length - 1].label = data
   }
 
@@ -174,9 +170,8 @@ export function directiveHtml(options) {
    * @type {_Handle}
    */
   function exitAttributeIdValue(token) {
-    /** @type {Array<Attribute>} */
-    // @ts-expect-error
     const attributes = this.getData('directiveAttributes')
+    assert(attributes, 'expected attributes')
     attributes.push([
       'id',
       parseEntities(this.sliceSerialize(token), {
@@ -190,9 +185,8 @@ export function directiveHtml(options) {
    * @type {_Handle}
    */
   function exitAttributeClassValue(token) {
-    /** @type {Array<Attribute>} */
-    // @ts-expect-error
     const attributes = this.getData('directiveAttributes')
+    assert(attributes, 'expected attributes')
 
     attributes.push([
       'class',
@@ -209,9 +203,8 @@ export function directiveHtml(options) {
   function exitAttributeName(token) {
     // Attribute names in CommonMark are significantly limited, so character
     // references can’t exist.
-    /** @type {Array<Attribute>} */
-    // @ts-expect-error
     const attributes = this.getData('directiveAttributes')
+    assert(attributes, 'expected attributes')
 
     attributes.push([this.sliceSerialize(token), ''])
   }
@@ -221,9 +214,8 @@ export function directiveHtml(options) {
    * @type {_Handle}
    */
   function exitAttributeValue(token) {
-    /** @type {Array<Attribute>} */
-    // @ts-expect-error
     const attributes = this.getData('directiveAttributes')
+    assert(attributes, 'expected attributes')
     attributes[attributes.length - 1][1] = parseEntities(
       this.sliceSerialize(token),
       {attribute: true}
@@ -235,20 +227,16 @@ export function directiveHtml(options) {
    * @type {_Handle}
    */
   function exitAttributes() {
-    /** @type {Directive[]} */
-    // @ts-expect-error
     const stack = this.getData('directiveStack')
-    /** @type {Array<Attribute>} */
-    // @ts-expect-error
+    assert(stack, 'expected directive stack')
     const attributes = this.getData('directiveAttributes')
+    assert(attributes, 'expected attributes')
     /** @type {Directive['attributes']} */
     const cleaned = {}
-    /** @type {Attribute} */
-    let attribute
     let index = -1
 
     while (++index < attributes.length) {
-      attribute = attributes[index]
+      const attribute = attributes[index]
 
       if (attribute[0] === 'class' && cleaned.class) {
         cleaned.class += ' ' + attribute[1]
@@ -268,9 +256,8 @@ export function directiveHtml(options) {
    */
   function exitContainerContent() {
     const data = this.resume()
-    /** @type {Directive[]} */
-    // @ts-expect-error
     const stack = this.getData('directiveStack')
+    assert(stack, 'expected directive stack')
     stack[stack.length - 1].content = data
   }
 
@@ -279,9 +266,8 @@ export function directiveHtml(options) {
    * @type {_Handle}
    */
   function exitContainerFence() {
-    /** @type {Directive[]} */
-    // @ts-expect-error
     const stack = this.getData('directiveStack')
+    assert(stack, 'expected directive stack')
     const directive = stack[stack.length - 1]
     if (!directive._fenceCount) directive._fenceCount = 0
     directive._fenceCount++
@@ -293,9 +279,10 @@ export function directiveHtml(options) {
    * @type {_Handle}
    */
   function exit() {
-    /** @type {Directive} */
-    // @ts-expect-error
-    const directive = this.getData('directiveStack').pop()
+    const stack = this.getData('directiveStack')
+    assert(stack, 'expected directive stack')
+    const directive = stack.pop()
+    assert(directive, 'expected directive')
     /** @type {boolean|undefined} */
     let found
     /** @type {boolean|void} */

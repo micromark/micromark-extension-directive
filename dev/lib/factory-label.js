@@ -2,6 +2,7 @@
  * @typedef {import('micromark-util-types').Effects} Effects
  * @typedef {import('micromark-util-types').State} State
  * @typedef {import('micromark-util-types').Token} Token
+ * @typedef {import('micromark-util-types').TokenType} TokenType
  */
 
 import {ok as assert} from 'uvu/assert'
@@ -19,9 +20,9 @@ import {types} from 'micromark-util-symbol/types.js'
  * @param {Effects} effects
  * @param {State} ok
  * @param {State} nok
- * @param {string} type
- * @param {string} markerType
- * @param {string} stringType
+ * @param {TokenType} type
+ * @param {TokenType} markerType
+ * @param {TokenType} stringType
  * @param {boolean} [disallowEol=false]
  */
 // eslint-disable-next-line max-params

@@ -6,3 +6,4 @@ node_modules/
 /lib/
 /index.js
 yarn.lock
+!dev/index.d.ts
