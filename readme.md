@@ -57,7 +57,7 @@ internals away.
 ## Install
 
 This package is [ESM only][esm].
-In Node.js (version 14.14+), install with [npm][]:
+In Node.js (version 16+), install with [npm][]:
 
 [npm][]:
 
@@ -104,6 +104,7 @@ console.log(output)
 /**
  * @this {import('micromark-util-types').CompileContext}
  * @type {import('micromark-extension-directive').Handle}
+ * @returns {undefined}
  */
 function abbr(d) {
   if (d.type !== 'textDirective') return false
@@ -154,7 +155,7 @@ HTML.
 
 ###### Parameters
 
-*   `options` ([`HtmlOptions`][api-html-options], optional)
+*   `options` ([`HtmlOptions`][api-html-options], default: `{}`)
     — configuration
 
 ###### Returns
@@ -169,15 +170,15 @@ Structure representing a directive (TypeScript type).
 
 ###### Fields
 
-*   `type` (`'textDirective'`, `'leafDirective'`, or `'containerDirective'`)
+*   `type` (`'containerDirective'`, `'leafDirective'`, or `'textDirective'`)
     — kind
 *   `name` (`string`)
     — name of directive
-*   `label` (`string`, optional)
+*   `label` (`string` or `undefined`)
     — compiled HTML content that was in `[brackets]`
-*   `attributes` (`Record<string, string>`, optional)
+*   `attributes` (`Record<string, string>` or `undefined`)
     — object w/ HTML attributes
-*   `content` (`string`, optional)
+*   `content` (`string` or `undefined`)
     — compiled HTML content inside container directive
 
 ### `Handle`
@@ -306,12 +307,15 @@ It exports the additional types [`Directive`][api-directive-type],
 
 ## Compatibility
 
-Projects maintained by the unified collective are compatible with all maintained
+Projects maintained by the unified collective are compatible with maintained
 versions of Node.js.
-As of now, that is Node.js 14.14+.
-Our projects sometimes work with older versions, but this is not guaranteed.
 
-These extensions work with `micromark` version 3+.
+When we cut a new major release, we drop support for unmaintained versions of
+Node.
+This means we try to keep the current release line,
+`micromark-extension-directive@^2`, compatible with Node.js 12.
+
+This package works with `micromark` version `3` and later.
 
 ## Security
 
@@ -354,9 +358,9 @@ abide by its terms.
 
 [downloads]: https://www.npmjs.com/package/micromark-extension-directive
 
-[size-badge]: https://img.shields.io/bundlephobia/minzip/micromark-extension-directive.svg
+[size-badge]: https://img.shields.io/badge/dynamic/json?label=minzipped%20size&query=$.size.compressedSize&url=https://deno.bundlejs.com/?q=micromark-extension-directive
 
-[size]: https://bundlephobia.com/result?p=micromark-extension-directive
+[size]: https://bundlejs.com/?q=micromark-extension-directive
 
 [sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
 
@@ -376,11 +380,11 @@ abide by its terms.
 
 [author]: https://wooorm.com
 
-[contributing]: https://github.com/micromark/.github/blob/HEAD/contributing.md
+[contributing]: https://github.com/micromark/.github/blob/main/contributing.md
 
-[support]: https://github.com/micromark/.github/blob/HEAD/support.md
+[support]: https://github.com/micromark/.github/blob/main/support.md
 
-[coc]: https://github.com/micromark/.github/blob/HEAD/code-of-conduct.md
+[coc]: https://github.com/micromark/.github/blob/main/code-of-conduct.md
 
 [esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
 
