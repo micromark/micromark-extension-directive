@@ -33,9 +33,8 @@ import {types} from 'micromark-util-symbol/types.js'
  * @param {TokenType} attributeValueType
  * @param {TokenType} attributeValueMarker
  * @param {TokenType} attributeValueData
- * @param {boolean} [disallowEol=false]
+ * @param {boolean | undefined} [disallowEol=false]
  */
-/* eslint-disable-next-line max-params */
 export function factoryAttributes(
   effects,
   ok,

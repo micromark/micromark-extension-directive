@@ -23,9 +23,8 @@ import {types} from 'micromark-util-symbol/types.js'
  * @param {TokenType} type
  * @param {TokenType} markerType
  * @param {TokenType} stringType
- * @param {boolean} [disallowEol=false]
+ * @param {boolean | undefined} [disallowEol=false]
  */
-// eslint-disable-next-line max-params
 export function factoryLabel(
   effects,
   ok,
@@ -37,7 +36,7 @@ export function factoryLabel(
 ) {
   let size = 0
   let balance = 0
-  /** @type {Token|undefined} */
+  /** @type {Token | undefined} */
   let previous
 
   return start

@@ -22,8 +22,9 @@
  *   Current context.
  * @param {Directive} directive
  *   Directive.
- * @returns {boolean | void}
+ * @returns {boolean | undefined}
  *   Signal whether the directive was handled.
+ *
  *   Yield `false` to let the fallback (a special handle for `'*'`) handle it.
  *
  * @typedef Directive
@@ -54,8 +55,8 @@ const own = {}.hasOwnProperty
  * Create an extension for `micromark` to support directives when serializing
  * to HTML.
  *
- * @param {HtmlOptions | null | undefined} [options]
- *   Configuration.
+ * @param {HtmlOptions | null | undefined} [options={}]
+ *   Configuration (default: `{}`).
  * @returns {HtmlExtension}
  *   Extension for `micromark` that can be passed in `htmlExtensions`, to
  *   support directives when serializing to HTML.
@@ -283,9 +284,9 @@ export function directiveHtml(options) {
     assert(stack, 'expected directive stack')
     const directive = stack.pop()
     assert(directive, 'expected directive')
-    /** @type {boolean|undefined} */
+    /** @type {boolean | undefined} */
     let found
-    /** @type {boolean|void} */
+    /** @type {boolean | undefined} */
     let result
 
     assert(directive.name, 'expected `name`')

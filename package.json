@@ -90,11 +90,21 @@
     "strict": true
   },
   "xo": {
+    "overrides": [
+      {
+        "files": [
+          "**/*.ts"
+        ],
+        "rules": {
+          "@typescript-eslint/consistent-type-definitions": "off"
+        }
+      }
+    ],
     "prettier": true,
     "rules": {
+      "max-params": "off",
       "n/file-extension-in-import": "off",
-      "unicorn/no-this-assignment": "off",
-      "unicorn/prefer-node-protocol": "off"
+      "unicorn/no-this-assignment": "off"
     }
   }
 }

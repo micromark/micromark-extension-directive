@@ -9,7 +9,6 @@ export {
 } from './lib/html.js'
 
 declare module 'micromark-util-types' {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface TokenTypeMap {
     directiveContainer: 'directiveContainer'
     directiveContainerAttributes: 'directiveContainerAttributes'
@@ -74,7 +73,6 @@ declare module 'micromark-util-types' {
     directiveTextName: 'directiveTextName'
   }
 
-  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface CompileData {
     directiveAttributes?: Attribute[]
     directiveStack?: Directive[]
