@@ -49,8 +49,8 @@
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "c8": "^7.0.0",
-    "html-void-elements": "^2.0.0",
+    "c8": "^8.0.0",
+    "html-void-elements": "^3.0.0",
     "micromark": "^3.0.0",
     "micromark-build": "^1.0.0",
     "prettier": "^2.0.0",
