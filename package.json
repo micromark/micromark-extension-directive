@@ -25,19 +25,16 @@
   ],
   "sideEffects": false,
   "type": "module",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "exports": {
+    "development": "./dev/index.js",
+    "default": "./index.js"
+  },
   "files": [
     "dev/",
     "lib/",
     "index.d.ts",
     "index.js"
   ],
-  "exports": {
-    "types": "./index.d.ts",
-    "development": "./dev/index.js",
-    "default": "./index.js"
-  },
   "dependencies": {
     "devlop": "^1.0.0",
     "micromark-factory-space": "^2.0.0",
@@ -103,7 +100,6 @@
     "prettier": true,
     "rules": {
       "max-params": "off",
-      "n/file-extension-in-import": "off",
       "unicorn/no-this-assignment": "off"
     }
   }
