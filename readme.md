@@ -68,14 +68,14 @@ npm install micromark-extension-directive
 In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import {directive, directiveHtml} from 'https://esm.sh/micromark-extension-directive@2'
+import {directive, directiveHtml} from 'https://esm.sh/micromark-extension-directive@3'
 ```
 
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import {directive, directiveHtml} from 'https://esm.sh/micromark-extension-directive@2?bundle'
+  import {directive, directiveHtml} from 'https://esm.sh/micromark-extension-directive@3?bundle'
 </script>
 ```
 
