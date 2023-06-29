@@ -5,7 +5,7 @@
  * @typedef {import('micromark-util-types').TokenType} TokenType
  */
 
-import {ok as assert} from 'uvu/assert'
+import {ok as assert} from 'devlop'
 import {factorySpace} from 'micromark-factory-space'
 import {factoryWhitespace} from 'micromark-factory-whitespace'
 import {

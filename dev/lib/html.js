@@ -46,7 +46,7 @@
  *   Kind.
  */
 
-import {ok as assert} from 'uvu/assert'
+import {ok as assert} from 'devlop'
 import {parseEntities} from 'parse-entities'
 
 const own = {}.hasOwnProperty

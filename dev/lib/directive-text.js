@@ -6,7 +6,7 @@
  * @typedef {import('micromark-util-types').Tokenizer} Tokenizer
  */
 
-import {ok as assert} from 'uvu/assert'
+import {ok as assert} from 'devlop'
 import {codes, types} from 'micromark-util-symbol'
 import {factoryAttributes} from './factory-attributes.js'
 import {factoryLabel} from './factory-label.js'

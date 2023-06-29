@@ -5,7 +5,7 @@
  * @typedef {import('micromark-util-types').Tokenizer} Tokenizer
  */
 
-import {ok as assert} from 'uvu/assert'
+import {ok as assert} from 'devlop'
 import {factorySpace} from 'micromark-factory-space'
 import {markdownLineEnding} from 'micromark-util-character'
 import {codes, types} from 'micromark-util-symbol'
