@@ -66,7 +66,7 @@ export function directiveHtml(options) {
   return {
     enter: {
       directiveContainer() {
-        return enter.call(this, 'containerDirective')
+        enter.call(this, 'containerDirective')
       },
       directiveContainerAttributes: enterAttributes,
       directiveContainerLabel: enterLabel,
@@ -75,13 +75,13 @@ export function directiveHtml(options) {
       },
 
       directiveLeaf() {
-        return enter.call(this, 'leafDirective')
+        enter.call(this, 'leafDirective')
       },
       directiveLeafAttributes: enterAttributes,
       directiveLeafLabel: enterLabel,
 
       directiveText() {
-        return enter.call(this, 'textDirective')
+        enter.call(this, 'textDirective')
       },
       directiveTextAttributes: enterAttributes,
       directiveTextLabel: enterLabel

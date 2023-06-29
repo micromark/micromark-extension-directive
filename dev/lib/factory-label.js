@@ -7,9 +7,7 @@
 
 import {ok as assert} from 'uvu/assert'
 import {markdownLineEnding} from 'micromark-util-character'
-import {codes} from 'micromark-util-symbol/codes.js'
-import {constants} from 'micromark-util-symbol/constants.js'
-import {types} from 'micromark-util-symbol/types.js'
+import {codes, constants, types} from 'micromark-util-symbol'
 
 // This is a fork of:
 // <https://github.com/micromark/micromark/tree/main/packages/micromark-factory-label>

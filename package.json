@@ -39,11 +39,11 @@
     "default": "./index.js"
   },
   "dependencies": {
-    "micromark-factory-space": "^1.0.0",
-    "micromark-factory-whitespace": "^1.0.0",
-    "micromark-util-character": "^1.0.0",
-    "micromark-util-symbol": "^1.0.0",
-    "micromark-util-types": "^1.0.0",
+    "micromark-factory-space": "^2.0.0",
+    "micromark-factory-whitespace": "^2.0.0",
+    "micromark-util-character": "^2.0.0",
+    "micromark-util-symbol": "^2.0.0",
+    "micromark-util-types": "^2.0.0",
     "parse-entities": "^4.0.0",
     "uvu": "^0.5.0"
   },
@@ -51,8 +51,8 @@
     "@types/node": "^20.0.0",
     "c8": "^8.0.0",
     "html-void-elements": "^3.0.0",
-    "micromark": "^3.0.0",
-    "micromark-build": "^1.0.0",
+    "micromark": "^4.0.0",
+    "micromark-build": "^2.0.0",
     "prettier": "^2.0.0",
     "remark-cli": "^11.0.0",
     "remark-preset-wooorm": "^9.0.0",

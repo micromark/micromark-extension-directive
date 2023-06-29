@@ -7,8 +7,7 @@
  */
 
 import {ok as assert} from 'uvu/assert'
-import {codes} from 'micromark-util-symbol/codes.js'
-import {types} from 'micromark-util-symbol/types.js'
+import {codes, types} from 'micromark-util-symbol'
 import {factoryAttributes} from './factory-attributes.js'
 import {factoryLabel} from './factory-label.js'
 import {factoryName} from './factory-name.js'

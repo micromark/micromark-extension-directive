@@ -1701,7 +1701,11 @@ function youtube(d) {
 
 /**
  * @this {CompileContext}
+ *   Context.
  * @type {Handle}
+ *   Handle.
+ * @returns {undefined}
+ *   Nothing.
  */
 function h(d) {
   const content = d.content || d.label

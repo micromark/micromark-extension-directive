@@ -6,7 +6,7 @@
  */
 
 import {asciiAlpha, asciiAlphanumeric} from 'micromark-util-character'
-import {codes} from 'micromark-util-symbol/codes.js'
+import {codes} from 'micromark-util-symbol'
 
 /**
  * @this {TokenizeContext}
