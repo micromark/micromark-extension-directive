@@ -36,6 +36,7 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
       ? tail[2].sliceSerialize(tail[1], true).length
       : 0
   let sizeOpen = 0
+  let lvl = 0
   /** @type {Token} */
   let previous
 
@@ -232,9 +233,17 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
     /** @type {State} */
     function closingSequenceEnd(code) {
       if (code === codes.eof || markdownLineEnding(code)) {
+        if (lvl > 0) {
+          lvl--
+          return nok(code)
+        }
+
         effects.exit('directiveContainerFence')
+
         return ok(code)
       }
+
+      lvl++
 
       return nok(code)
     }
