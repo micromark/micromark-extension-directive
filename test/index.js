@@ -12,14 +12,16 @@ import {directive, directiveHtml} from 'micromark-extension-directive'
 
 const own = {}.hasOwnProperty
 
-test('micromark-extension-directive (syntax, text)', async function (t) {
+test('micromark-extension-directive (core)', async function (t) {
   await t.test('should expose the public api', async function () {
     assert.deepEqual(
       Object.keys(await import('micromark-extension-directive')).sort(),
       ['directive', 'directiveHtml']
     )
   })
+})
 
+test('micromark-extension-directive (syntax, text)', async function (t) {
   await t.test(
     'should support an escaped colon which would otherwise be a directive',
     async function () {
@@ -178,6 +180,16 @@ test('micromark-extension-directive (syntax, text)', async function (t) {
   await t.test('should support markdown in an label', async function () {
     assert.equal(micromark(':a[a *b* c]asd', options()), '<p>asd</p>')
   })
+
+  await t.test(
+    'should support markdown in an label (hard break)',
+    async function () {
+      assert.equal(
+        micromark(':x[a  \nb]c', options({'*': h})),
+        '<p><x>a<br />\nb</x>c</p>'
+      )
+    }
+  )
 
   await t.test('should support a directive in an label', async function () {
     assert.equal(micromark('a :b[c :d[e] f] g', options()), '<p>a  g</p>')
