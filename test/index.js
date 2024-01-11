@@ -81,6 +81,16 @@ test('micromark-extension-directive (syntax, text)', async function (t) {
     assert.equal(micromark(':xγз', options()), '<p></p>')
   })
 
+  await t.test('should support unicode accents inner name', async function () {
+    // (Decomposed) Combining Acute Accent in Cyrillic
+    assert.equal(micromark(':за́мок-чи-замо́к', options()), '<p></p>')
+  })
+
+  await t.test('should support unicode accents at the name end', async function () {
+    // (Decomposed) Combining Circumflex Accent in Latin
+    assert.equal(micromark(':â', options()), '<p></p>')
+  })
+
   await t.test(
     'should *not* support punctuation at the end of a name',
     async function () {
@@ -429,6 +439,16 @@ test('micromark-extension-directive (syntax, leaf)', async function (t) {
   await t.test('should support unicode alphabets in name', async function () {
     // Latin, Greek, Cyrillic respectively
     assert.equal(micromark('::xγз', options()), '')
+  })
+
+  await t.test('should support unicode accents inner name', async function () {
+    // (Decomposed) Combining Acute Accent in Cyrillic
+    assert.equal(micromark('::за́мок-чи-замо́к', options()), '')
+  })
+
+  await t.test('should support unicode accents at the name end', async function () {
+    // (Decomposed) Combining Circumflex Accent in Latin
+    assert.equal(micromark('::â', options()), '')
   })
 
   await t.test(
@@ -802,6 +822,16 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
   await t.test('should support unicode alphabets in name', async function () {
     // Latin, Greek, Cyrillic respectively
     assert.equal(micromark(':::xγз', options()), '')
+  })
+
+  await t.test('should support unicode accents inner name', async function () {
+    // (Decomposed) Combining Acute Accent in Cyrillic
+    assert.equal(micromark(':::за́мок-чи-замо́к', options()), '')
+  })
+
+  await t.test('should support unicode accents at the name end', async function () {
+    // (Decomposed) Combining Circumflex Accent in Latin
+    assert.equal(micromark(':::â', options()), '')
   })
 
   await t.test(
