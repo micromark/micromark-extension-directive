@@ -43,12 +43,9 @@ test('micromark-extension-directive (syntax, text)', async function (t) {
     }
   )
 
-  await t.test(
-    'should not support a colon not followed by an alpha',
-    async function () {
-      assert.equal(micromark(':', options()), '<p>:</p>')
-    }
-  )
+  await t.test('should not support a lonely colon', async function () {
+    assert.equal(micromark(':', options()), '<p>:</p>')
+  })
 
   await t.test(
     'should support a colon followed by an alpha',
@@ -57,24 +54,17 @@ test('micromark-extension-directive (syntax, text)', async function (t) {
     }
   )
 
-  await t.test(
-    'should not support a colon followed by a digit',
-    async function () {
-      assert.equal(micromark(':9', options()), '<p>:9</p>')
-    }
-  )
+  await t.test('should support a colon followed by a digit', async function () {
+    assert.equal(micromark(':9', options()), '<p></p>')
+  })
 
   await t.test(
-    'should not support a colon followed by a dash',
+    'should not support a colon followed by a punctuation',
     async function () {
       assert.equal(micromark(':-', options()), '<p>:-</p>')
-    }
-  )
-
-  await t.test(
-    'should not support a colon followed by an underscore',
-    async function () {
       assert.equal(micromark(':_', options()), '<p>:_</p>')
+      assert.equal(micromark(':.', options()), '<p>:.</p>')
+      assert.equal(micromark(':\u2014', options()), '<p>:\u2014</p>') // Em dash
     }
   )
 
@@ -86,21 +76,18 @@ test('micromark-extension-directive (syntax, text)', async function (t) {
     assert.equal(micromark(':a-b', options()), '<p></p>')
   })
 
-  await t.test(
-    'should *not* support a dash at the end of a name',
-    async function () {
-      assert.equal(micromark(':a-', options()), '<p>:a-</p>')
-    }
-  )
-
-  await t.test('should support an underscore in a name', async function () {
-    assert.equal(micromark(':a_b', options()), '<p></p>')
+  await t.test('should support unicode alphabets in name', async function () {
+    // Latin, Greek, Cyrillic respectively
+    assert.equal(micromark(':xγз', options()), '<p></p>')
   })
 
   await t.test(
-    'should *not* support an underscore at the end of a name',
+    'should *not* support punctuation at the end of a name',
     async function () {
+      assert.equal(micromark(':a-', options()), '<p>:a-</p>')
       assert.equal(micromark(':a_', options()), '<p>:a_</p>')
+      assert.equal(micromark(':a.', options()), '<p>:a.</p>')
+      assert.equal(micromark(':a\u2014', options()), '<p>:a\u2014</p>') // Em dash
     }
   )
 
@@ -411,16 +398,19 @@ test('micromark-extension-directive (syntax, leaf)', async function (t) {
   )
 
   await t.test(
-    'should not support two colons followed by a digit',
+    'should support two colons followed by a digit',
     async function () {
-      assert.equal(micromark('::9', options()), '<p>::9</p>')
+      assert.equal(micromark('::9', options()), '')
     }
   )
 
   await t.test(
-    'should not support two colons followed by a dash',
+    'should not support two colons followed by punctuation',
     async function () {
       assert.equal(micromark('::-', options()), '<p>::-</p>')
+      assert.equal(micromark('::_', options()), '<p>::_</p>')
+      assert.equal(micromark('::.', options()), '<p>::.</p>')
+      assert.equal(micromark('::\u2014', options()), '<p>::\u2014</p>') // Em dash
     }
   )
 
@@ -428,8 +418,17 @@ test('micromark-extension-directive (syntax, leaf)', async function (t) {
     assert.equal(micromark('::a9', options()), '')
   })
 
-  await t.test('should support a dash in a name', async function () {
+  await t.test('should support punctuation in a name', async function () {
     assert.equal(micromark('::a-b', options()), '')
+    assert.equal(micromark('::a-b', options()), '')
+    assert.equal(micromark('::a_b', options()), '')
+    assert.equal(micromark('::a.b', options()), '')
+    assert.equal(micromark('::a\u2014b', options()), '')
+  })
+
+  await t.test('should support unicode alphabets in name', async function () {
+    // Latin, Greek, Cyrillic respectively
+    assert.equal(micromark('::xγз', options()), '')
   })
 
   await t.test(
@@ -773,16 +772,19 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
   )
 
   await t.test(
-    'should not support three colons followed by a digit',
+    'should support three colons followed by a digit',
     async function () {
-      assert.equal(micromark(':::9', options()), '<p>:::9</p>')
+      assert.equal(micromark(':::9', options()), '')
     }
   )
 
   await t.test(
-    'should not support three colons followed by a dash',
+    'should not support three colons followed by punctuation',
     async function () {
       assert.equal(micromark(':::-', options()), '<p>:::-</p>')
+      assert.equal(micromark(':::_', options()), '<p>:::_</p>')
+      assert.equal(micromark(':::.', options()), '<p>:::.</p>')
+      assert.equal(micromark(':::\u2014', options()), '<p>:::\u2014</p>') // Em dash
     }
   )
 
@@ -790,8 +792,16 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
     assert.equal(micromark(':::a9', options()), '')
   })
 
-  await t.test('should support a dash in a name', async function () {
+  await t.test('should support punctuation in a name', async function () {
     assert.equal(micromark(':::a-b', options()), '')
+    assert.equal(micromark(':::a_b', options()), '')
+    assert.equal(micromark(':::a.b', options()), '')
+    assert.equal(micromark(':::a\u2014b', options()), '') // Em dash
+  })
+
+  await t.test('should support unicode alphabets in name', async function () {
+    // Latin, Greek, Cyrillic respectively
+    assert.equal(micromark(':::xγз', options()), '')
   })
 
   await t.test(
