@@ -100,10 +100,10 @@ test('micromark-extension-directive (syntax, text)', async function (t) {
   })
 
   await t.test('should support math symbols in name', async function () {
-    assert.equal(micromark(':𝜋∈ℝ', options()), '<p></p>') // italic
-    assert.equal(micromark(':𝛑≈3.14', options()), '<p></p>') // bold
-    assert.equal(micromark(':𝝅∉ℚ', options()), '<p></p>') // bold italic
-    assert.equal(micromark(':𝞹≠3.14', options()), '<p></p>') // sans bold italic
+    assert.equal(micromark(':𝜋∈ℝ', options()), '<p></p>') // Italic
+    assert.equal(micromark(':𝛑≈3.14', options()), '<p></p>') // Bold
+    assert.equal(micromark(':𝝅∉ℚ', options()), '<p></p>') // Bold italic
+    assert.equal(micromark(':𝞹≠3.14', options()), '<p></p>') // Sans bold italic
   })
 
   await t.test(
@@ -112,7 +112,7 @@ test('micromark-extension-directive (syntax, text)', async function (t) {
       assert.equal(micromark(':a-', options()), '<p>:a-</p>')
       assert.equal(micromark(':a_', options()), '<p>:a_</p>')
       assert.equal(micromark(':a.', options()), '<p>:a.</p>')
-      assert.equal(micromark(':a—', options()), '<p>:a—</p>') // em dash
+      assert.equal(micromark(':a—', options()), '<p>:a—</p>') // Em dash
     }
   )
 
