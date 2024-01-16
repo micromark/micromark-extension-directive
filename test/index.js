@@ -91,6 +91,18 @@ test('micromark-extension-directive (syntax, text)', async function (t) {
     assert.equal(micromark(':â', options()), '<p></p>')
   })
 
+  await t.test('should support emojis in name', async function () {
+    assert.equal(micromark(':🌍', options()), '<p></p>')
+    assert.equal(micromark(':w🌍rld', options()), '<p></p>')
+  })
+
+  await t.test('should support math symbols in name', async function () {
+    assert.equal(micromark(':𝜋∈ℝ', options()), '<p></p>') // italic
+    assert.equal(micromark(':𝛑≈3.14', options()), '<p></p>') // bold
+    assert.equal(micromark(':𝝅∉ℚ', options()), '<p></p>') // bold italic
+    assert.equal(micromark(':𝞹≠3.14', options()), '<p></p>') // sans bold italic
+  })
+
   await t.test(
     'should *not* support punctuation at the end of a name',
     async function () {
@@ -449,6 +461,18 @@ test('micromark-extension-directive (syntax, leaf)', async function (t) {
   await t.test('should support unicode accents at the name end', async function () {
     // (Decomposed) Combining Circumflex Accent in Latin
     assert.equal(micromark('::â', options()), '')
+  })
+
+  await t.test('should support emojis in name', async function () {
+    assert.equal(micromark('::🌍', options()), '')
+    assert.equal(micromark('::w🌍rld', options()), '')
+  })
+
+  await t.test('should support math symbols in name', async function () {
+    assert.equal(micromark('::𝜋∈ℝ', options()), '') // italic
+    assert.equal(micromark('::𝛑≈3.14', options()), '') // bold
+    assert.equal(micromark('::𝝅∉ℚ', options()), '') // bold italic
+    assert.equal(micromark('::𝞹≠3.14', options()), '') // sans bold italic
   })
 
   await t.test(
@@ -832,6 +856,18 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
   await t.test('should support unicode accents at the name end', async function () {
     // (Decomposed) Combining Circumflex Accent in Latin
     assert.equal(micromark(':::â', options()), '')
+  })
+
+  await t.test('should support emojis in name', async function () {
+    assert.equal(micromark(':::🌍', options()), '')
+    assert.equal(micromark(':::w🌍rld', options()), '')
+  })
+
+  await t.test('should support math symbols in name', async function () {
+    assert.equal(micromark(':::𝜋∈ℝ', options()), '') // italic
+    assert.equal(micromark(':::𝛑≈3.14', options()), '') // bold
+    assert.equal(micromark(':::𝝅∉ℚ', options()), '') // bold italic
+    assert.equal(micromark(':::𝞹≠3.14', options()), '') // sans bold italic
   })
 
   await t.test(
