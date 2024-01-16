@@ -64,7 +64,7 @@ test('micromark-extension-directive (syntax, text)', async function (t) {
       assert.equal(micromark(':-', options()), '<p>:-</p>')
       assert.equal(micromark(':_', options()), '<p>:_</p>')
       assert.equal(micromark(':.', options()), '<p>:.</p>')
-      assert.equal(micromark(':\u2014', options()), '<p>:\u2014</p>') // Em dash
+      assert.equal(micromark(':—', options()), '<p>:—</p>') // em dash
     }
   )
 
@@ -97,7 +97,7 @@ test('micromark-extension-directive (syntax, text)', async function (t) {
       assert.equal(micromark(':a-', options()), '<p>:a-</p>')
       assert.equal(micromark(':a_', options()), '<p>:a_</p>')
       assert.equal(micromark(':a.', options()), '<p>:a.</p>')
-      assert.equal(micromark(':a\u2014', options()), '<p>:a\u2014</p>') // Em dash
+      assert.equal(micromark(':a—', options()), '<p>:a—</p>') // em dash
     }
   )
 
@@ -420,7 +420,7 @@ test('micromark-extension-directive (syntax, leaf)', async function (t) {
       assert.equal(micromark('::-', options()), '<p>::-</p>')
       assert.equal(micromark('::_', options()), '<p>::_</p>')
       assert.equal(micromark('::.', options()), '<p>::.</p>')
-      assert.equal(micromark('::\u2014', options()), '<p>::\u2014</p>') // Em dash
+      assert.equal(micromark('::—', options()), '<p>::—</p>') // em dash
     }
   )
 
@@ -433,7 +433,7 @@ test('micromark-extension-directive (syntax, leaf)', async function (t) {
     assert.equal(micromark('::a-b', options()), '')
     assert.equal(micromark('::a_b', options()), '')
     assert.equal(micromark('::a.b', options()), '')
-    assert.equal(micromark('::a\u2014b', options()), '')
+    assert.equal(micromark('::a—b', options()), '')
   })
 
   await t.test('should support unicode alphabets in name', async function () {
@@ -804,7 +804,7 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
       assert.equal(micromark(':::-', options()), '<p>:::-</p>')
       assert.equal(micromark(':::_', options()), '<p>:::_</p>')
       assert.equal(micromark(':::.', options()), '<p>:::.</p>')
-      assert.equal(micromark(':::\u2014', options()), '<p>:::\u2014</p>') // Em dash
+      assert.equal(micromark(':::—', options()), '<p>:::—</p>') // em dash
     }
   )
 
@@ -816,7 +816,7 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
     assert.equal(micromark(':::a-b', options()), '')
     assert.equal(micromark(':::a_b', options()), '')
     assert.equal(micromark(':::a.b', options()), '')
-    assert.equal(micromark(':::a\u2014b', options()), '') // Em dash
+    assert.equal(micromark(':::a—b', options()), '') // em dash
   })
 
   await t.test('should support unicode alphabets in name', async function () {
