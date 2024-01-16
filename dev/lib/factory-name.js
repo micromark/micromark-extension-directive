@@ -10,21 +10,6 @@ import {asciiAlphanumeric} from 'micromark-util-character'
 import {classifyCharacter} from 'micromark-util-classify-character'
 import {codes, constants} from 'micromark-util-symbol'
 
-/** @param {Code} code **/
-const allowedCharacter = (code) =>
-  code !== null && code <= codes.del
-    ? code === codes.dash ||
-      code === codes.dot ||
-      code === codes.underscore ||
-      asciiAlphanumeric(code)
-    : classifyCharacter(code) !== constants.characterGroupWhitespace
-
-/** @param {Code} code **/
-const allowedEdgeCharacter = (code) =>
-  allowedCharacter(code) &&
-  classifyCharacter(code) !== constants.characterGroupPunctuation &&
-  code !== codes.underscore
-
 /**
  * @this {TokenizeContext}
  * @param {Effects} effects
@@ -58,4 +43,31 @@ export function factoryName(effects, ok, nok, type) {
     effects.exit(type)
     return allowedEdgeCharacter(self.previous) ? ok(code) : nok(code)
   }
+}
+
+/**
+ * Checks if the character code is valid for a directive name
+ *
+ * @param {Code} code
+ **/
+function allowedCharacter(code) {
+  return code !== null && code <= codes.del
+    ? code === codes.dash ||
+        code === codes.dot ||
+        code === codes.underscore ||
+        asciiAlphanumeric(code)
+    : classifyCharacter(code) !== constants.characterGroupWhitespace
+}
+
+/**
+ * Checks if the character code is valid as a directive name start (or end)
+ *
+ * @param {Code} code
+ **/
+function allowedEdgeCharacter(code) {
+  return (
+    allowedCharacter(code) &&
+    classifyCharacter(code) !== constants.characterGroupPunctuation &&
+    code !== codes.underscore
+  )
 }
