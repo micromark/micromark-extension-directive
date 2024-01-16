@@ -64,7 +64,7 @@ test('micromark-extension-directive (syntax, text)', async function (t) {
       assert.equal(micromark(':-', options()), '<p>:-</p>')
       assert.equal(micromark(':_', options()), '<p>:_</p>')
       assert.equal(micromark(':.', options()), '<p>:.</p>')
-      assert.equal(micromark(':—', options()), '<p>:—</p>') // em dash
+      assert.equal(micromark(':—', options()), '<p>:—</p>') // Em dash
     }
   )
 
@@ -86,10 +86,13 @@ test('micromark-extension-directive (syntax, text)', async function (t) {
     assert.equal(micromark(':за́мок-чи-замо́к', options()), '<p></p>')
   })
 
-  await t.test('should support unicode accents at the name end', async function () {
-    // (Decomposed) Combining Circumflex Accent in Latin
-    assert.equal(micromark(':â', options()), '<p></p>')
-  })
+  await t.test(
+    'should support unicode accents at the name end',
+    async function () {
+      // (Decomposed) Combining Circumflex Accent in Latin
+      assert.equal(micromark(':â', options()), '<p></p>')
+    }
+  )
 
   await t.test('should support emojis in name', async function () {
     assert.equal(micromark(':🌍', options()), '<p></p>')
@@ -432,7 +435,7 @@ test('micromark-extension-directive (syntax, leaf)', async function (t) {
       assert.equal(micromark('::-', options()), '<p>::-</p>')
       assert.equal(micromark('::_', options()), '<p>::_</p>')
       assert.equal(micromark('::.', options()), '<p>::.</p>')
-      assert.equal(micromark('::—', options()), '<p>::—</p>') // em dash
+      assert.equal(micromark('::—', options()), '<p>::—</p>') // Em dash
     }
   )
 
@@ -458,10 +461,13 @@ test('micromark-extension-directive (syntax, leaf)', async function (t) {
     assert.equal(micromark('::за́мок-чи-замо́к', options()), '')
   })
 
-  await t.test('should support unicode accents at the name end', async function () {
-    // (Decomposed) Combining Circumflex Accent in Latin
-    assert.equal(micromark('::â', options()), '')
-  })
+  await t.test(
+    'should support unicode accents at the name end',
+    async function () {
+      // (Decomposed) Combining Circumflex Accent in Latin
+      assert.equal(micromark('::â', options()), '')
+    }
+  )
 
   await t.test('should support emojis in name', async function () {
     assert.equal(micromark('::🌍', options()), '')
@@ -469,10 +475,10 @@ test('micromark-extension-directive (syntax, leaf)', async function (t) {
   })
 
   await t.test('should support math symbols in name', async function () {
-    assert.equal(micromark('::𝜋∈ℝ', options()), '') // italic
-    assert.equal(micromark('::𝛑≈3.14', options()), '') // bold
-    assert.equal(micromark('::𝝅∉ℚ', options()), '') // bold italic
-    assert.equal(micromark('::𝞹≠3.14', options()), '') // sans bold italic
+    assert.equal(micromark('::𝜋∈ℝ', options()), '') // Italic
+    assert.equal(micromark('::𝛑≈3.14', options()), '') // Bold
+    assert.equal(micromark('::𝝅∉ℚ', options()), '') // Bold italic
+    assert.equal(micromark('::𝞹≠3.14', options()), '') // Sans bold italic
   })
 
   await t.test(
@@ -828,7 +834,7 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
       assert.equal(micromark(':::-', options()), '<p>:::-</p>')
       assert.equal(micromark(':::_', options()), '<p>:::_</p>')
       assert.equal(micromark(':::.', options()), '<p>:::.</p>')
-      assert.equal(micromark(':::—', options()), '<p>:::—</p>') // em dash
+      assert.equal(micromark(':::—', options()), '<p>:::—</p>') // Em dash
     }
   )
 
@@ -840,7 +846,7 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
     assert.equal(micromark(':::a-b', options()), '')
     assert.equal(micromark(':::a_b', options()), '')
     assert.equal(micromark(':::a.b', options()), '')
-    assert.equal(micromark(':::a—b', options()), '') // em dash
+    assert.equal(micromark(':::a—b', options()), '') // Em dash
   })
 
   await t.test('should support unicode alphabets in name', async function () {
@@ -853,10 +859,13 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
     assert.equal(micromark(':::за́мок-чи-замо́к', options()), '')
   })
 
-  await t.test('should support unicode accents at the name end', async function () {
-    // (Decomposed) Combining Circumflex Accent in Latin
-    assert.equal(micromark(':::â', options()), '')
-  })
+  await t.test(
+    'should support unicode accents at the name end',
+    async function () {
+      // (Decomposed) Combining Circumflex Accent in Latin
+      assert.equal(micromark(':::â', options()), '')
+    }
+  )
 
   await t.test('should support emojis in name', async function () {
     assert.equal(micromark(':::🌍', options()), '')
@@ -864,10 +873,10 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
   })
 
   await t.test('should support math symbols in name', async function () {
-    assert.equal(micromark(':::𝜋∈ℝ', options()), '') // italic
-    assert.equal(micromark(':::𝛑≈3.14', options()), '') // bold
-    assert.equal(micromark(':::𝝅∉ℚ', options()), '') // bold italic
-    assert.equal(micromark(':::𝞹≠3.14', options()), '') // sans bold italic
+    assert.equal(micromark(':::𝜋∈ℝ', options()), '') // Italic
+    assert.equal(micromark(':::𝛑≈3.14', options()), '') // Bold
+    assert.equal(micromark(':::𝝅∉ℚ', options()), '') // Bold italic
+    assert.equal(micromark(':::𝞹≠3.14', options()), '') // Sans bold italic
   })
 
   await t.test(
