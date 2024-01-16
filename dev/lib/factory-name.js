@@ -18,8 +18,6 @@ import {codes, constants} from 'micromark-util-symbol'
  * @param {TokenType} type
  */
 export function factoryName(effects, ok, nok, type) {
-  const self = this
-
   return start
 
   /** @type {State} */
@@ -41,7 +39,7 @@ export function factoryName(effects, ok, nok, type) {
     }
 
     effects.exit(type)
-    return allowedEdgeCharacter(self.previous) ? ok(code) : nok(code)
+    return ok(code)
   }
 }
 
