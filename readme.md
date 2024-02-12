@@ -267,13 +267,21 @@ attributes: a *text* directive that only has a name, cannot be followed by a
 colon. So, `:red:` doesn’t work. Use either `:red[]` or `:red{}` instead.
 The reason for this is to allow GitHub emoji (gemoji) and directives to coexist.
 
-Containers can be nested by using more colons outside:
+Containers can be nested by using the same, more or less colons outside:
 
 ::::spoiler
 He dies.
 
-:::spoiler
+::::spoiler
 She is born.
+::::
+
+:::::spoiler
+It is resurrected.
+:::::
+
+:::spoiler
+We are redeemed.
 :::
 ::::
 
