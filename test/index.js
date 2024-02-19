@@ -943,6 +943,40 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
     }
   )
 
+  await t.test('should support nested directives', async function () {
+    assert.equal(micromark(':::a\n:::b\n:::\n:::\nc', options()), '<p>c</p>')
+  })
+
+  await t.test(
+    'should support nested directives with more colons',
+    async function () {
+      assert.equal(
+        micromark(':::a\n::::b\n::::\n:::\nc', options()),
+        '<p>c</p>'
+      )
+    }
+  )
+
+  await t.test(
+    'should support nested directives with less colons',
+    async function () {
+      assert.equal(
+        micromark('::::a\n:::b\n:::\n::::\nc', options()),
+        '<p>c</p>'
+      )
+    }
+  )
+
+  await t.test(
+    'should support closing nested directives with more colons than the opening',
+    async function () {
+      assert.equal(
+        micromark('::::a\n:::b\n::::\n::::\nc', options()),
+        '<p>c</p>'
+      )
+    }
+  )
+
   await t.test(
     'should close w/ a closing fence followed by white space',
     async function () {
