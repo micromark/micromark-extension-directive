@@ -1678,10 +1678,10 @@ function abbr(d) {
  * @type {Handle}
  */
 function youtube(d) {
-  const attrs = d.attributes || {}
-  const v = attrs.v
+  const attributes = d.attributes || {}
+  const v = attributes.v
   /** @type {string} */
-  let prop
+  let key
 
   if (!v) return false
 
@@ -1694,9 +1694,9 @@ function youtube(d) {
     list.push('title="' + this.encode(d.label) + '"')
   }
 
-  for (prop in attrs) {
-    if (prop !== 'v') {
-      list.push(this.encode(prop) + '="' + this.encode(attrs[prop]) + '"')
+  for (key in attributes) {
+    if (key !== 'v') {
+      list.push(this.encode(key) + '="' + this.encode(attributes[key]) + '"')
     }
   }
 
@@ -1721,15 +1721,15 @@ function youtube(d) {
  */
 function h(d) {
   const content = d.content || d.label
-  const attrs = d.attributes || {}
+  const attributes = d.attributes || {}
   /** @type {Array<string>} */
   const list = []
   /** @type {string} */
-  let prop
+  let key
 
-  for (prop in attrs) {
-    if (own.call(attrs, prop)) {
-      list.push(this.encode(prop) + '="' + this.encode(attrs[prop]) + '"')
+  for (key in attributes) {
+    if (own.call(attributes, key)) {
+      list.push(this.encode(key) + '="' + this.encode(attributes[key]) + '"')
     }
   }
 

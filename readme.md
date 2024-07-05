@@ -13,26 +13,26 @@ such).
 
 ## Contents
 
-*   [What is this?](#what-is-this)
-*   [When to use this](#when-to-use-this)
-*   [Install](#install)
-*   [Use](#use)
-*   [API](#api)
-    *   [`directive()`](#directive)
-    *   [`directiveHtml(options?)`](#directivehtmloptions)
-    *   [`Directive`](#directive-1)
-    *   [`Handle`](#handle)
-    *   [`HtmlOptions`](#htmloptions)
-*   [Authoring](#authoring)
-*   [HTML](#html)
-*   [CSS](#css)
-*   [Syntax](#syntax)
-*   [Types](#types)
-*   [Compatibility](#compatibility)
-*   [Security](#security)
-*   [Related](#related)
-*   [Contribute](#contribute)
-*   [License](#license)
+* [What is this?](#what-is-this)
+* [When to use this](#when-to-use-this)
+* [Install](#install)
+* [Use](#use)
+* [API](#api)
+  * [`directive()`](#directive)
+  * [`directiveHtml(options?)`](#directivehtmloptions)
+  * [`Directive`](#directive-1)
+  * [`Handle`](#handle)
+  * [`HtmlOptions`](#htmloptions)
+* [Authoring](#authoring)
+* [HTML](#html)
+* [CSS](#css)
+* [Syntax](#syntax)
+* [Types](#types)
+* [Compatibility](#compatibility)
+* [Security](#security)
+* [Related](#related)
+* [Contribute](#contribute)
+* [License](#license)
 
 ## What is this?
 
@@ -155,8 +155,8 @@ HTML.
 
 ###### Parameters
 
-*   `options` ([`HtmlOptions`][api-html-options], default: `{}`)
-    — configuration
+* `options` ([`HtmlOptions`][api-html-options], default: `{}`)
+  — configuration
 
 ###### Returns
 
@@ -170,16 +170,16 @@ Structure representing a directive (TypeScript type).
 
 ###### Fields
 
-*   `type` (`'containerDirective'`, `'leafDirective'`, or `'textDirective'`)
-    — kind
-*   `name` (`string`)
-    — name of directive
-*   `label` (`string` or `undefined`)
-    — compiled HTML content that was in `[brackets]`
-*   `attributes` (`Record<string, string>` or `undefined`)
-    — object w/ HTML attributes
-*   `content` (`string` or `undefined`)
-    — compiled HTML content inside container directive
+* `type` (`'containerDirective'`, `'leafDirective'`, or `'textDirective'`)
+  — kind
+* `name` (`string`)
+  — name of directive
+* `label` (`string` or `undefined`)
+  — compiled HTML content that was in `[brackets]`
+* `attributes` (`Record<string, string>` or `undefined`)
+  — object w/ HTML attributes
+* `content` (`string` or `undefined`)
+  — compiled HTML content inside container directive
 
 ### `Handle`
 
@@ -187,10 +187,10 @@ Handle a directive (TypeScript type).
 
 ###### Parameters
 
-*   `this` ([`CompileContext`][micromark-compile-context])
-    — current context
-*   `directive` ([`Directive`][api-directive-type])
-    — directive
+* `this` ([`CompileContext`][micromark-compile-context])
+  — current context
+* `directive` ([`Directive`][api-directive-type])
+  — directive
 
 ###### Returns
 
@@ -290,14 +290,14 @@ So this line is also part of the container.
 Note that while other implementations are sometimes loose in what they allow,
 this implementation mimics CommonMark as closely as possible:
 
-*   Whitespace is not allowed between colons and name (~~`: a`~~), name and
-    label (~~`:a []`~~), name and attributes (~~`:a {}`~~), or label and
-    attributes (~~`:a[] {}`~~) — because it’s not allowed in links either
-    (~~`[] ()`~~)
-*   No trailing colons allowed on the opening fence of a container
-    (~~`:::a:::`~~) — because it’s not allowed in fenced code either
-*   The label and attributes in a leaf or container cannot include line endings
-    (~~`::a[b\nc]`~~) — because it’s not allowed in fenced code either
+* Whitespace is not allowed between colons and name (~~`: a`~~), name and
+  label (~~`:a []`~~), name and attributes (~~`:a {}`~~), or label and
+  attributes (~~`:a[] {}`~~) — because it’s not allowed in links either
+  (~~`[] ()`~~)
+* No trailing colons allowed on the opening fence of a container
+  (~~`:::a:::`~~) — because it’s not allowed in fenced code either
+* The label and attributes in a leaf or container cannot include line endings
+  (~~`::a[b\nc]`~~) — because it’s not allowed in fenced code either
 
 ## Types
 
@@ -325,10 +325,10 @@ Any vulnerability in your code could open you to a
 
 ## Related
 
-*   [`remark-directive`][remark-directive]
-    — remark plugin to support directives
-*   [`mdast-util-directive`][mdast-util-directive]
-    — mdast utility to support directives
+* [`remark-directive`][remark-directive]
+  — remark plugin to support directives
+* [`mdast-util-directive`][mdast-util-directive]
+  — mdast utility to support directives
 
 ## Contribute
 
