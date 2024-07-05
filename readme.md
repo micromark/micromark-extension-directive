@@ -90,6 +90,11 @@ A lovely language know as :abbr[HTML]{title="HyperText Markup Language"}.
 …and our module `example.js` looks as follows:
 
 ```js
+/**
+ * @import {Handle} from 'micromark-extension-directive'
+ * @import {CompileContext} from 'micromark-util-types'
+ */
+
 import fs from 'node:fs/promises'
 import {micromark} from 'micromark'
 import {directive, directiveHtml} from 'micromark-extension-directive'
@@ -102,8 +107,8 @@ const output = micromark(await fs.readFile('example.md'), {
 console.log(output)
 
 /**
- * @this {import('micromark-util-types').CompileContext}
- * @type {import('micromark-extension-directive').Handle}
+ * @this {CompileContext}
+ * @type {Handle}
  * @returns {undefined}
  */
 function abbr(d) {

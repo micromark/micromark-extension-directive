@@ -1,7 +1,6 @@
 /**
- * @typedef {import('micromark-util-types').CompileContext} CompileContext
- * @typedef {import('micromark-extension-directive').HtmlOptions} HtmlOptions
- * @typedef {import('micromark-extension-directive').Handle} Handle
+ * @import {Handle, HtmlOptions} from 'micromark-extension-directive'
+ * @import {CompileContext} from 'micromark-util-types'
  */
 
 import assert from 'node:assert/strict'

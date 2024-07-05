@@ -1,8 +1,5 @@
 /**
- * @typedef {import('micromark-util-types').Effects} Effects
- * @typedef {import('micromark-util-types').State} State
- * @typedef {import('micromark-util-types').Token} Token
- * @typedef {import('micromark-util-types').TokenType} TokenType
+ * @import {Code, Effects, State, Token, TokenType} from 'micromark-util-types'
  */
 
 import {ok as assert} from 'devlop'
