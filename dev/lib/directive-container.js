@@ -197,12 +197,14 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
    */
   function tokenizeClosingFence(effects, ok, nok) {
     let size = 0
-
+    assert(self.parser.constructs.disable.null, 'expected `disable.null`')
     return factorySpace(
       effects,
       closingPrefixAfter,
       types.linePrefix,
-      constants.tabSize
+      self.parser.constructs.disable.null.includes('codeIndented')
+        ? undefined
+        : constants.tabSize
     )
 
     /** @type {State} */

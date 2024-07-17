@@ -994,6 +994,20 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
   )
 
   await t.test(
+    'should strip arbitrary length prefix from closing fence line (codeIndented disabled)',
+    async function () {
+      assert.equal(
+        micromark(':::x\nalpha.\n    :::\n\nbravo.', {
+          allowDangerousHtml: true,
+          extensions: [directive(), {disable: {null: ['codeIndented']}}],
+          htmlExtensions: [directiveHtml()]
+        }),
+        '<p>bravo.</p>'
+      )
+    }
+  )
+
+  await t.test(
     'should support a block quote after a container',
     async function () {
       assert.equal(
