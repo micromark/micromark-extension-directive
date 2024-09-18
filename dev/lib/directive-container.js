@@ -179,6 +179,16 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
 
   /** @type {State} */
   function lineAfter(code) {
+    const now = self.now()
+    if (
+      previous.start._index === now._index &&
+      previous.start._bufferIndex === now._bufferIndex
+    ) {
+      // Used to avoid "expected non-empty token" in cases where
+      // an un-closed directive is found within a container
+      return nok(code)
+    }
+
     const t = effects.exit(types.chunkDocument)
     self.parser.lazy[t.start.line] = false
     return after(code)

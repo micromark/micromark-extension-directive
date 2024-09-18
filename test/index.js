@@ -1211,6 +1211,26 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
       '<blockquote><a></a>\n</blockquote>\n<p>:::</p>'
     )
   })
+
+  await t.test(
+    'should support being inside blockquote without close',
+    async function () {
+      assert.equal(
+        micromark('> :::directive\n>\n', options()),
+        '<blockquote>\n<p>:::directive</p>\n</blockquote>\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should support being inside list item without close',
+    async function () {
+      assert.equal(
+        micromark('* text\n   :::note\n\ntext', options()),
+        '<ul>\n<li>text:::note</li>\n</ul>\n<p>text</p>'
+      )
+    }
+  )
 })
 
 test('micromark-extension-directive (compile)', async function (t) {
