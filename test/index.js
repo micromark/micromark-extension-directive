@@ -906,6 +906,86 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
     assert.equal(micromark(':::a\n', options()), '')
   })
 
+  await t.test(
+    'should should support no closing fence in a block quote (1)',
+    async function () {
+      assert.equal(
+        micromark('> :::directive', options()),
+        '<blockquote>\n</blockquote>'
+      )
+    }
+  )
+
+  await t.test(
+    'should should support no closing fence in a block quote (2)',
+    async function () {
+      assert.equal(
+        micromark('> :::directive\n>\n', options()),
+        '<blockquote>\n</blockquote>'
+      )
+    }
+  )
+
+  await t.test(
+    'should should support no closing fence in a block quote (3)',
+    async function () {
+      assert.equal(
+        micromark('> :::directive\n> asd\n', options()),
+        '<blockquote>\n</blockquote>'
+      )
+    }
+  )
+
+  await t.test(
+    'should should support no closing fence in a block quote (4)',
+    async function () {
+      assert.equal(
+        micromark('> :::directive\n>\n\nasd', options()),
+        '<blockquote>\n</blockquote>\n<p>asd</p>'
+      )
+    }
+  )
+
+  await t.test(
+    'should should support no closing fence in a list (1)',
+    async function () {
+      assert.equal(
+        micromark('* :::directive', options()),
+        '<ul>\n<li></li>\n</ul>'
+      )
+    }
+  )
+
+  await t.test(
+    'should should support no closing fence in a list (2)',
+    async function () {
+      assert.equal(
+        micromark('* :::directive\n  \n', options()),
+        '<ul>\n<li></li>\n</ul>'
+      )
+    }
+  )
+
+  await t.test(
+    'should should support no closing fence in a list (3)',
+    async function () {
+      assert.equal(
+        micromark('* :::directive\n  asd\n', options()),
+        '<ul>\n<li></li>\n</ul>'
+      )
+    }
+  )
+
+  await t.test(
+    'should should support no closing fence in a list (4)',
+    async function () {
+      assert.equal(
+        micromark('* :::directive\n  \n\nasd', options()),
+        '<ul>\n<li></li>\n</ul>\n<p>asd</p>'
+      )
+    }
+  )
+
   await t.test('should support an immediate closing fence', async function () {
     assert.equal(micromark(':::a\n:::', options()), '')
   })

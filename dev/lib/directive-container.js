@@ -92,7 +92,7 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
     effects.exit('directiveContainerFence')
 
     if (code === codes.eof) {
-      return afterOpening(code)
+      return after(code)
     }
 
     if (markdownLineEnding(code)) {
@@ -100,23 +100,24 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
         return ok(code)
       }
 
-      return effects.attempt(nonLazyLine, contentStart, afterOpening)(code)
+      return effects.attempt(nonLazyLine, contentStart, after)(code)
     }
 
     return nok(code)
   }
 
   /** @type {State} */
-  function afterOpening(code) {
-    effects.exit('directiveContainer')
-    return ok(code)
-  }
-
-  /** @type {State} */
   function contentStart(code) {
     if (code === codes.eof) {
-      effects.exit('directiveContainer')
-      return ok(code)
+      return after(code)
+    }
+
+    if (markdownLineEnding(code)) {
+      return effects.check(
+        nonLazyLine,
+        emptyContentNonLazyLineAfter,
+        after
+      )(code)
     }
 
     effects.enter('directiveContainerContent')
@@ -125,13 +126,9 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
 
   /** @type {State} */
   function lineStart(code) {
-    if (code === codes.eof) {
-      return after(code)
-    }
-
     return effects.attempt(
       {tokenize: tokenizeClosingFence, partial: true},
-      after,
+      afterContent,
       initialSize
         ? factorySpace(effects, chunkStart, types.linePrefix, initialSize + 1)
         : chunkStart
@@ -141,9 +138,34 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
   /** @type {State} */
   function chunkStart(code) {
     if (code === codes.eof) {
-      return after(code)
+      return afterContent(code)
     }
 
+    if (markdownLineEnding(code)) {
+      return effects.check(nonLazyLine, chunkNonLazyStart, afterContent)(code)
+    }
+
+    return chunkNonLazyStart(code)
+  }
+
+  /** @type {State} */
+  function contentContinue(code) {
+    if (code === codes.eof) {
+      const t = effects.exit(types.chunkDocument)
+      self.parser.lazy[t.start.line] = false
+      return afterContent(code)
+    }
+
+    if (markdownLineEnding(code)) {
+      return effects.check(nonLazyLine, nonLazyLineAfter, lineAfter)(code)
+    }
+
+    effects.consume(code)
+    return contentContinue
+  }
+
+  /** @type {State} */
+  function chunkNonLazyStart(code) {
     const token = effects.enter(types.chunkDocument, {
       contentType: constants.contentTypeDocument,
       previous
@@ -154,19 +176,9 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
   }
 
   /** @type {State} */
-  function contentContinue(code) {
-    if (code === codes.eof) {
-      const t = effects.exit(types.chunkDocument)
-      self.parser.lazy[t.start.line] = false
-      return after(code)
-    }
-
-    if (markdownLineEnding(code)) {
-      return effects.check(nonLazyLine, nonLazyLineAfter, lineAfter)(code)
-    }
-
-    effects.consume(code)
-    return contentContinue
+  function emptyContentNonLazyLineAfter(code) {
+    effects.enter('directiveContainerContent')
+    return lineStart(code)
   }
 
   /** @type {State} */
@@ -181,12 +193,17 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
   function lineAfter(code) {
     const t = effects.exit(types.chunkDocument)
     self.parser.lazy[t.start.line] = false
+    return afterContent(code)
+  }
+
+  /** @type {State} */
+  function afterContent(code) {
+    effects.exit('directiveContainerContent')
     return after(code)
   }
 
   /** @type {State} */
   function after(code) {
-    effects.exit('directiveContainerContent')
     effects.exit('directiveContainer')
     return ok(code)
   }
