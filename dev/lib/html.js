@@ -1,49 +1,6 @@
 /**
- * @typedef {import('micromark-util-types').CompileContext} CompileContext
- * @typedef {import('micromark-util-types').Handle} _Handle
- * @typedef {import('micromark-util-types').HtmlExtension} HtmlExtension
- */
-
-/**
- * @typedef {[string, string]} Attribute
- *   Internal tuple representing an attribute.
- */
-
-/**
- * @typedef {Record<string, Handle>} HtmlOptions
- *   Configuration.
- *
- *   > 👉 **Note**: the special field `'*'` can be used to specify a fallback
- *   > handle to handle all otherwise unhandled directives.
- *
- * @callback Handle
- *   Handle a directive.
- * @param {CompileContext} this
- *   Current context.
- * @param {Directive} directive
- *   Directive.
- * @returns {boolean | undefined}
- *   Signal whether the directive was handled.
- *
- *   Yield `false` to let the fallback (a special handle for `'*'`) handle it.
- *
- * @typedef Directive
- *   Structure representing a directive.
- * @property {DirectiveType} type
- *   Kind.
- * @property {string} name
- *   Name of directive.
- * @property {string | undefined} [label]
- *   Compiled HTML content that was in `[brackets]`.
- * @property {Record<string, string> | undefined} [attributes]
- *   Object w/ HTML attributes.
- * @property {string | undefined} [content]
- *   Compiled HTML content inside container directive.
- * @property {number | undefined} [_fenceCount]
- *   Private :)
- *
- * @typedef {'containerDirective' | 'leafDirective' | 'textDirective'} DirectiveType
- *   Kind.
+ * @import {Directive, HtmlOptions} from 'micromark-extension-directive'
+ * @import {CompileContext, Handle as MicromarkHandle, HtmlExtension} from 'micromark-util-types'
  */
 
 import {ok as assert} from 'devlop'
@@ -120,7 +77,7 @@ export function directiveHtml(options) {
 
   /**
    * @this {CompileContext}
-   * @param {DirectiveType} type
+   * @param {Directive['type']} type
    */
   function enter(type) {
     let stack = this.getData('directiveStack')
@@ -130,7 +87,7 @@ export function directiveHtml(options) {
 
   /**
    * @this {CompileContext}
-   * @type {_Handle}
+   * @type {MicromarkHandle}
    */
   function exitName(token) {
     const stack = this.getData('directiveStack')
@@ -140,7 +97,7 @@ export function directiveHtml(options) {
 
   /**
    * @this {CompileContext}
-   * @type {_Handle}
+   * @type {MicromarkHandle}
    */
   function enterLabel() {
     this.buffer()
@@ -148,7 +105,7 @@ export function directiveHtml(options) {
 
   /**
    * @this {CompileContext}
-   * @type {_Handle}
+   * @type {MicromarkHandle}
    */
   function exitLabel() {
     const data = this.resume()
@@ -159,7 +116,7 @@ export function directiveHtml(options) {
 
   /**
    * @this {CompileContext}
-   * @type {_Handle}
+   * @type {MicromarkHandle}
    */
   function enterAttributes() {
     this.buffer()
@@ -168,7 +125,7 @@ export function directiveHtml(options) {
 
   /**
    * @this {CompileContext}
-   * @type {_Handle}
+   * @type {MicromarkHandle}
    */
   function exitAttributeIdValue(token) {
     const attributes = this.getData('directiveAttributes')
@@ -183,7 +140,7 @@ export function directiveHtml(options) {
 
   /**
    * @this {CompileContext}
-   * @type {_Handle}
+   * @type {MicromarkHandle}
    */
   function exitAttributeClassValue(token) {
     const attributes = this.getData('directiveAttributes')
@@ -199,7 +156,7 @@ export function directiveHtml(options) {
 
   /**
    * @this {CompileContext}
-   * @type {_Handle}
+   * @type {MicromarkHandle}
    */
   function exitAttributeName(token) {
     // Attribute names in CommonMark are significantly limited, so character
@@ -212,7 +169,7 @@ export function directiveHtml(options) {
 
   /**
    * @this {CompileContext}
-   * @type {_Handle}
+   * @type {MicromarkHandle}
    */
   function exitAttributeValue(token) {
     const attributes = this.getData('directiveAttributes')
@@ -225,14 +182,14 @@ export function directiveHtml(options) {
 
   /**
    * @this {CompileContext}
-   * @type {_Handle}
+   * @type {MicromarkHandle}
    */
   function exitAttributes() {
     const stack = this.getData('directiveStack')
     assert(stack, 'expected directive stack')
     const attributes = this.getData('directiveAttributes')
     assert(attributes, 'expected attributes')
-    /** @type {Directive['attributes']} */
+    /** @type {Record<string, string>} */
     const cleaned = {}
     let index = -1
 
@@ -253,7 +210,7 @@ export function directiveHtml(options) {
 
   /**
    * @this {CompileContext}
-   * @type {_Handle}
+   * @type {MicromarkHandle}
    */
   function exitContainerContent() {
     const data = this.resume()
@@ -264,7 +221,7 @@ export function directiveHtml(options) {
 
   /**
    * @this {CompileContext}
-   * @type {_Handle}
+   * @type {MicromarkHandle}
    */
   function exitContainerFence() {
     const stack = this.getData('directiveStack')
@@ -277,7 +234,7 @@ export function directiveHtml(options) {
 
   /**
    * @this {CompileContext}
-   * @type {_Handle}
+   * @type {MicromarkHandle}
    */
   function exit() {
     const stack = this.getData('directiveStack')

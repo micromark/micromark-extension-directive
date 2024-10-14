@@ -1,7 +1,6 @@
 /**
- * @typedef {import('micromark-util-types').CompileContext} CompileContext
- * @typedef {import('micromark-extension-directive').HtmlOptions} HtmlOptions
- * @typedef {import('micromark-extension-directive').Handle} Handle
+ * @import {Handle, HtmlOptions} from 'micromark-extension-directive'
+ * @import {CompileContext} from 'micromark-util-types'
  */
 
 import assert from 'node:assert/strict'
@@ -907,6 +906,86 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
     assert.equal(micromark(':::a\n', options()), '')
   })
 
+  await t.test(
+    'should should support no closing fence in a block quote (1)',
+    async function () {
+      assert.equal(
+        micromark('> :::directive', options()),
+        '<blockquote>\n</blockquote>'
+      )
+    }
+  )
+
+  await t.test(
+    'should should support no closing fence in a block quote (2)',
+    async function () {
+      assert.equal(
+        micromark('> :::directive\n>\n', options()),
+        '<blockquote>\n</blockquote>'
+      )
+    }
+  )
+
+  await t.test(
+    'should should support no closing fence in a block quote (3)',
+    async function () {
+      assert.equal(
+        micromark('> :::directive\n> asd\n', options()),
+        '<blockquote>\n</blockquote>'
+      )
+    }
+  )
+
+  await t.test(
+    'should should support no closing fence in a block quote (4)',
+    async function () {
+      assert.equal(
+        micromark('> :::directive\n>\n\nasd', options()),
+        '<blockquote>\n</blockquote>\n<p>asd</p>'
+      )
+    }
+  )
+
+  await t.test(
+    'should should support no closing fence in a list (1)',
+    async function () {
+      assert.equal(
+        micromark('* :::directive', options()),
+        '<ul>\n<li></li>\n</ul>'
+      )
+    }
+  )
+
+  await t.test(
+    'should should support no closing fence in a list (2)',
+    async function () {
+      assert.equal(
+        micromark('* :::directive\n  \n', options()),
+        '<ul>\n<li></li>\n</ul>'
+      )
+    }
+  )
+
+  await t.test(
+    'should should support no closing fence in a list (3)',
+    async function () {
+      assert.equal(
+        micromark('* :::directive\n  asd\n', options()),
+        '<ul>\n<li></li>\n</ul>'
+      )
+    }
+  )
+
+  await t.test(
+    'should should support no closing fence in a list (4)',
+    async function () {
+      assert.equal(
+        micromark('* :::directive\n  \n\nasd', options()),
+        '<ul>\n<li></li>\n</ul>\n<p>asd</p>'
+      )
+    }
+  )
+
   await t.test('should support an immediate closing fence', async function () {
     assert.equal(micromark(':::a\n:::', options()), '')
   })
@@ -1025,6 +1104,20 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
     'should still not close an indented directive when the “closing” fence is indented a tab size',
     async function () {
       assert.equal(micromark('  :::a\n\t:::\nc', options()), '')
+    }
+  )
+
+  await t.test(
+    'should strip arbitrary length prefix from closing fence line (codeIndented disabled)',
+    async function () {
+      assert.equal(
+        micromark(':::x\nalpha.\n    :::\n\nbravo.', {
+          allowDangerousHtml: true,
+          extensions: [directive(), {disable: {null: ['codeIndented']}}],
+          htmlExtensions: [directiveHtml()]
+        }),
+        '<p>bravo.</p>'
+      )
     }
   )
 
@@ -1712,10 +1805,10 @@ function abbr(d) {
  * @type {Handle}
  */
 function youtube(d) {
-  const attrs = d.attributes || {}
-  const v = attrs.v
+  const attributes = d.attributes || {}
+  const v = attributes.v
   /** @type {string} */
-  let prop
+  let key
 
   if (!v) return false
 
@@ -1728,9 +1821,9 @@ function youtube(d) {
     list.push('title="' + this.encode(d.label) + '"')
   }
 
-  for (prop in attrs) {
-    if (prop !== 'v') {
-      list.push(this.encode(prop) + '="' + this.encode(attrs[prop]) + '"')
+  for (key in attributes) {
+    if (key !== 'v') {
+      list.push(this.encode(key) + '="' + this.encode(attributes[key]) + '"')
     }
   }
 
@@ -1755,15 +1848,15 @@ function youtube(d) {
  */
 function h(d) {
   const content = d.content || d.label
-  const attrs = d.attributes || {}
+  const attributes = d.attributes || {}
   /** @type {Array<string>} */
   const list = []
   /** @type {string} */
-  let prop
+  let key
 
-  for (prop in attrs) {
-    if (own.call(attrs, prop)) {
-      list.push(this.encode(prop) + '="' + this.encode(attrs[prop]) + '"')
+  for (key in attributes) {
+    if (own.call(attributes, key)) {
+      list.push(this.encode(key) + '="' + this.encode(attributes[key]) + '"')
     }
   }
 

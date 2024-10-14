@@ -1,14 +1,95 @@
-import type {Attribute, Directive} from './lib/html.js'
+import type {CompileContext} from 'micromark-util-types'
 
 export {directive} from './lib/syntax.js'
-export {
-  directiveHtml,
-  type Directive,
-  type Handle,
-  type HtmlOptions
-} from './lib/html.js'
+export {directiveHtml} from './lib/html.js'
 
+/**
+ * Internal tuple representing an attribute.
+ */
+type AttributeTuple = [key: string, value: string]
+
+/**
+ * Directive attribute.
+ */
+interface Attributes {
+  /**
+   * Key to value.
+   */
+  [key: string]: string
+}
+
+/**
+ * Structure representing a directive.
+ */
+export interface Directive {
+  /**
+   * Private :)
+   */
+  _fenceCount?: number | undefined
+  /**
+   * Object w/ HTML attributes.
+   */
+  attributes?: Attributes | undefined
+  /**
+   * Compiled HTML content inside container directive.
+   */
+  content?: string | undefined
+  /**
+   * Compiled HTML content that was in `[brackets]`.
+   */
+  label?: string | undefined
+  /**
+   * Name of directive.
+   */
+  name: string
+  /**
+   * Kind.
+   */
+  type: 'containerDirective' | 'leafDirective' | 'textDirective'
+}
+
+/**
+ * Handle a directive.
+ *
+ * @param this
+ *   Current context.
+ * @param directive
+ *   Directive.
+ * @returns
+ *   Signal whether the directive was handled.
+ *
+ *   Yield `false` to let the fallback (a special handle for `'*'`) handle it.
+ */
+export type Handle = (
+  this: CompileContext,
+  directive: Directive
+) => boolean | undefined
+
+/**
+ * Configuration.
+ *
+ * > 👉 **Note**: the special field `'*'` can be used to specify a fallback
+ * > handle to handle all otherwise unhandled directives.
+ */
+export interface HtmlOptions {
+  [name: string]: Handle
+}
+
+/**
+ * Augment types.
+ */
 declare module 'micromark-util-types' {
+  /**
+   * Compile data.
+   */
+  interface CompileData {
+    directiveAttributes?: Array<AttributeTuple>
+    directiveStack?: Array<Directive>
+  }
+
+  /**
+   * Token types.
+   */
   interface TokenTypeMap {
     directiveContainer: 'directiveContainer'
     directiveContainerAttributes: 'directiveContainerAttributes'
@@ -71,10 +152,5 @@ declare module 'micromark-util-types' {
     directiveTextLabelString: 'directiveTextLabelString'
     directiveTextMarker: 'directiveTextMarker'
     directiveTextName: 'directiveTextName'
-  }
-
-  interface CompileData {
-    directiveAttributes?: Attribute[]
-    directiveStack?: Directive[]
   }
 }
