@@ -109,7 +109,7 @@ console.log(output)
 /**
  * @this {CompileContext}
  * @type {Handle}
- * @returns {undefined}
+ * @returns {false | undefined}
  */
 function abbr(d) {
   if (d.type !== 'textDirective') return false
