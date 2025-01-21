@@ -55,7 +55,7 @@
     "remark-preset-wooorm": "^10.0.0",
     "type-coverage": "^2.0.0",
     "typescript": "^5.0.0",
-    "xo": "^0.59.0"
+    "xo": "^0.60.0"
   },
   "scripts": {
     "prepack": "npm run build && npm run format",
