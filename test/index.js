@@ -1746,6 +1746,16 @@ test('content', async function (t) {
       assert.equal(micromark(':::i\n- +\na', options()), '')
     }
   )
+
+  await t.test(
+    'should support line endings + spread in containers (syntax-tree/mdast-util-directive#13)',
+    async function () {
+      assert.equal(
+        micromark(' :::div\n* b\n\n c\n:::', options({'*': h})),
+        '<div>\n<ul>\n<li>b</li>\n</ul>\n<p>c</p>\n</div>'
+      )
+    }
+  )
 })
 
 /**
