@@ -168,20 +168,20 @@ test('micromark-extension-directive (syntax, text)', async function (t) {
     assert.equal(micromark(':a[ \t]', options()), '<p></p>')
   })
 
-  await t.test('should support an eol in an label', async function () {
+  await t.test('should support an eol in a label', async function () {
     assert.equal(micromark(':a[\n]', options()), '<p></p>')
   })
 
-  await t.test('should support content in an label', async function () {
+  await t.test('should support content in a label', async function () {
     assert.equal(micromark(':a[a b c]asd', options()), '<p>asd</p>')
   })
 
-  await t.test('should support markdown in an label', async function () {
+  await t.test('should support markdown in a label', async function () {
     assert.equal(micromark(':a[a *b* c]asd', options()), '<p>asd</p>')
   })
 
   await t.test(
-    'should support markdown in an label (hard break)',
+    'should support markdown in a label (hard break)',
     async function () {
       assert.equal(
         micromark(':x[a  \nb]c', options({'*': h})),
@@ -190,7 +190,7 @@ test('micromark-extension-directive (syntax, text)', async function (t) {
     }
   )
 
-  await t.test('should support a directive in an label', async function () {
+  await t.test('should support a directive in a label', async function () {
     assert.equal(micromark('a :b[c :d[e] f] g', options()), '<p>a  g</p>')
   })
 
@@ -467,15 +467,15 @@ test('micromark-extension-directive (syntax, leaf)', async function (t) {
     assert.equal(micromark('::a[ \t]', options()), '')
   })
 
-  await t.test('should not support an eol in an label', async function () {
+  await t.test('should not support an eol in a label', async function () {
     assert.equal(micromark('::a[\n]', options()), '<p>::a[\n]</p>')
   })
 
-  await t.test('should support content in an label', async function () {
+  await t.test('should support content in a label', async function () {
     assert.equal(micromark('::a[a b c]', options()), '')
   })
 
-  await t.test('should support markdown in an label', async function () {
+  await t.test('should support markdown in a label', async function () {
     assert.equal(micromark('::a[a *b* c]', options()), '')
   })
 
@@ -829,15 +829,15 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
     assert.equal(micromark(':::a[ \t]', options()), '')
   })
 
-  await t.test('should not support an eol in an label', async function () {
+  await t.test('should not support an eol in a label', async function () {
     assert.equal(micromark(':::a[\n]', options()), '<p>:::a[\n]</p>')
   })
 
-  await t.test('should support content in an label', async function () {
+  await t.test('should support content in a label', async function () {
     assert.equal(micromark(':::a[a b c]', options()), '')
   })
 
-  await t.test('should support markdown in an label', async function () {
+  await t.test('should support markdown in a label', async function () {
     assert.equal(micromark(':::a[a *b* c]', options()), '')
   })
 
@@ -907,7 +907,7 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
   })
 
   await t.test(
-    'should should support no closing fence in a block quote (1)',
+    'should support no closing fence in a block quote (1)',
     async function () {
       assert.equal(
         micromark('> :::directive', options()),
@@ -917,7 +917,7 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
   )
 
   await t.test(
-    'should should support no closing fence in a block quote (2)',
+    'should support no closing fence in a block quote (2)',
     async function () {
       assert.equal(
         micromark('> :::directive\n>\n', options()),
@@ -927,7 +927,7 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
   )
 
   await t.test(
-    'should should support no closing fence in a block quote (3)',
+    'should support no closing fence in a block quote (3)',
     async function () {
       assert.equal(
         micromark('> :::directive\n> asd\n', options()),
@@ -937,7 +937,7 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
   )
 
   await t.test(
-    'should should support no closing fence in a block quote (4)',
+    'should support no closing fence in a block quote (4)',
     async function () {
       assert.equal(
         micromark('> :::directive\n>\n\nasd', options()),
@@ -947,7 +947,7 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
   )
 
   await t.test(
-    'should should support no closing fence in a list (1)',
+    'should support no closing fence in a list (1)',
     async function () {
       assert.equal(
         micromark('* :::directive', options()),
@@ -957,7 +957,7 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
   )
 
   await t.test(
-    'should should support no closing fence in a list (2)',
+    'should support no closing fence in a list (2)',
     async function () {
       assert.equal(
         micromark('* :::directive\n  \n', options()),
@@ -967,7 +967,7 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
   )
 
   await t.test(
-    'should should support no closing fence in a list (3)',
+    'should support no closing fence in a list (3)',
     async function () {
       assert.equal(
         micromark('* :::directive\n  asd\n', options()),
@@ -977,7 +977,7 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
   )
 
   await t.test(
-    'should should support no closing fence in a list (4)',
+    'should support no closing fence in a list (4)',
     async function () {
       assert.equal(
         micromark('* :::directive\n  \n\nasd', options()),
