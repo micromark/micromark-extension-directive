@@ -351,68 +351,6 @@ abide by its terms.
 
 <!-- Definitions -->
 
-[build-badge]: https://github.com/micromark/micromark-extension-directive/workflows/main/badge.svg
-
-[build]: https://github.com/micromark/micromark-extension-directive/actions
-
-[coverage-badge]: https://img.shields.io/codecov/c/github/micromark/micromark-extension-directive.svg
-
-[coverage]: https://codecov.io/github/micromark/micromark-extension-directive
-
-[downloads-badge]: https://img.shields.io/npm/dm/micromark-extension-directive.svg
-
-[downloads]: https://www.npmjs.com/package/micromark-extension-directive
-
-[size-badge]: https://img.shields.io/badge/dynamic/json?label=minzipped%20size&query=$.size.compressedSize&url=https://deno.bundlejs.com/?q=micromark-extension-directive
-
-[size]: https://bundlejs.com/?q=micromark-extension-directive
-
-[sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
-
-[backers-badge]: https://opencollective.com/unified/backers/badge.svg
-
-[collective]: https://opencollective.com/unified
-
-[chat-badge]: https://img.shields.io/badge/chat-discussions-success.svg
-
-[chat]: https://github.com/micromark/micromark/discussions
-
-[npm]: https://docs.npmjs.com/cli/install
-
-[esmsh]: https://esm.sh
-
-[license]: license
-
-[author]: https://wooorm.com
-
-[contributing]: https://github.com/micromark/.github/blob/main/contributing.md
-
-[support]: https://github.com/micromark/.github/blob/main/support.md
-
-[coc]: https://github.com/micromark/.github/blob/main/code-of-conduct.md
-
-[esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
-
-[typescript]: https://www.typescriptlang.org
-
-[development]: https://nodejs.org/api/packages.html#packages_resolving_user_conditions
-
-[micromark]: https://github.com/micromark/micromark
-
-[micromark-html-extension]: https://github.com/micromark/micromark#htmlextension
-
-[micromark-extension]: https://github.com/micromark/micromark#syntaxextension
-
-[micromark-compile-context]: https://github.com/micromark/micromark/blob/41e3c4c/packages/micromark-util-types/index.js#L457
-
-[mdast-util-directive]: https://github.com/syntax-tree/mdast-util-directive
-
-[remark-directive]: https://github.com/remarkjs/remark-directive
-
-[prop]: https://talk.commonmark.org/t/generic-directives-plugins-syntax/444
-
-[xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
-
 [api-directive]: #directive
 
 [api-directive-html]: #directivehtmloptions
@@ -422,3 +360,65 @@ abide by its terms.
 [api-handle]: #handle
 
 [api-html-options]: #htmloptions
+
+[author]: https://wooorm.com
+
+[backers-badge]: https://opencollective.com/unified/backers/badge.svg
+
+[build]: https://github.com/micromark/micromark-extension-directive/actions
+
+[build-badge]: https://github.com/micromark/micromark-extension-directive/workflows/main/badge.svg
+
+[chat]: https://github.com/micromark/micromark/discussions
+
+[chat-badge]: https://img.shields.io/badge/chat-discussions-success.svg
+
+[coc]: https://github.com/micromark/.github/blob/main/code-of-conduct.md
+
+[collective]: https://opencollective.com/unified
+
+[contributing]: https://github.com/micromark/.github/blob/main/contributing.md
+
+[coverage]: https://codecov.io/github/micromark/micromark-extension-directive
+
+[coverage-badge]: https://img.shields.io/codecov/c/github/micromark/micromark-extension-directive.svg
+
+[development]: https://nodejs.org/api/packages.html#packages_resolving_user_conditions
+
+[downloads]: https://www.npmjs.com/package/micromark-extension-directive
+
+[downloads-badge]: https://img.shields.io/npm/dm/micromark-extension-directive.svg
+
+[esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
+
+[esmsh]: https://esm.sh
+
+[license]: license
+
+[mdast-util-directive]: https://github.com/syntax-tree/mdast-util-directive
+
+[micromark]: https://github.com/micromark/micromark
+
+[micromark-compile-context]: https://github.com/micromark/micromark/blob/41e3c4c/packages/micromark-util-types/index.js#L457
+
+[micromark-extension]: https://github.com/micromark/micromark#syntaxextension
+
+[micromark-html-extension]: https://github.com/micromark/micromark#htmlextension
+
+[npm]: https://docs.npmjs.com/cli/install
+
+[prop]: https://talk.commonmark.org/t/generic-directives-plugins-syntax/444
+
+[remark-directive]: https://github.com/remarkjs/remark-directive
+
+[size]: https://bundlejs.com/?q=micromark-extension-directive
+
+[size-badge]: https://img.shields.io/badge/dynamic/json?label=minzipped%20size&query=$.size.compressedSize&url=https://deno.bundlejs.com/?q=micromark-extension-directive
+
+[sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
+
+[support]: https://github.com/micromark/.github/blob/main/support.md
+
+[typescript]: https://www.typescriptlang.org
+
+[xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
