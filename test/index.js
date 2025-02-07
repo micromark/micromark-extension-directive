@@ -43,23 +43,27 @@ test('micromark-extension-directive (syntax, text)', async function (t) {
   )
 
   await t.test(
-    'should not support a colon not followed by an alpha',
+    'should not support a colon not followed by a letter',
     async function () {
       assert.equal(micromark(':', options()), '<p>:</p>')
     }
   )
 
   await t.test(
-    'should support a colon followed by an alpha',
+    'should support a colon followed by a letter',
     async function () {
       assert.equal(micromark(':a', options()), '<p></p>')
     }
   )
 
+  await t.test('should support a colon followed by a digit', async function () {
+    assert.equal(micromark(':9', options()), '<p></p>')
+  })
+
   await t.test(
-    'should not support a colon followed by a digit',
+    'should support a colon followed by non-ascii letters',
     async function () {
-      assert.equal(micromark(':9', options()), '<p>:9</p>')
+      assert.equal(micromark('a :פּלוטאָ b', options()), '<p>a  b</p>')
     }
   )
 
@@ -74,6 +78,13 @@ test('micromark-extension-directive (syntax, text)', async function (t) {
     'should not support a colon followed by an underscore',
     async function () {
       assert.equal(micromark(':_', options()), '<p>:_</p>')
+    }
+  )
+
+  await t.test(
+    'should not support a colon followed by non-ascii punctuation',
+    async function () {
+      assert.equal(micromark(':꙳', options()), '<p>:꙳</p>')
     }
   )
 
@@ -215,6 +226,16 @@ test('micromark-extension-directive (syntax, text)', async function (t) {
   })
 
   await t.test(
+    'should support attributes w/ non-ascii letters',
+    async function () {
+      assert.equal(
+        micromark(':planet{плутон}', options({'*': h})),
+        '<p><planet плутон=""></planet></p>'
+      )
+    }
+  )
+
+  await t.test(
     'should support attributes w/ unquoted values',
     async function () {
       assert.equal(micromark(':a{a=b c=d}', options()), '<p></p>')
@@ -283,6 +304,13 @@ test('micromark-extension-directive (syntax, text)', async function (t) {
     'should not support certain characters in shortcuts (`<`)',
     async function () {
       assert.equal(micromark(':a{.a<b}', options()), '<p>{.a&lt;b}</p>')
+    }
+  )
+
+  await t.test(
+    'should support non-ascii characters in shortcuts',
+    async function () {
+      assert.equal(micromark(':a{#بلوتو}', options()), '<p></p>')
     }
   )
 
@@ -396,23 +424,30 @@ test('micromark-extension-directive (syntax, leaf)', async function (t) {
   })
 
   await t.test(
-    'should not support two colons not followed by an alpha',
+    'should not support two colons not followed by a letter',
     async function () {
       assert.equal(micromark('::', options()), '<p>::</p>')
     }
   )
 
   await t.test(
-    'should support two colons followed by an alpha',
+    'should support two colons followed by a letter',
     async function () {
       assert.equal(micromark('::a', options()), '')
     }
   )
 
   await t.test(
-    'should not support two colons followed by a digit',
+    'should support two colons followed by a digit',
     async function () {
-      assert.equal(micromark('::9', options()), '<p>::9</p>')
+      assert.equal(micromark('::9', options()), '')
+    }
+  )
+
+  await t.test(
+    'should support two colons followed by non-ascii letters',
+    async function () {
+      assert.equal(micromark('::פּלוטאָ', options()), '')
     }
   )
 
@@ -500,6 +535,16 @@ test('micromark-extension-directive (syntax, leaf)', async function (t) {
   })
 
   await t.test(
+    'should support attributes w/ non-ascii letters',
+    async function () {
+      assert.equal(
+        micromark('::planet{плутон}', options({'*': h})),
+        '<planet плутон=""></planet>'
+      )
+    }
+  )
+
+  await t.test(
     'should support attributes w/ unquoted values',
     async function () {
       assert.equal(micromark('::a{a=b c=d}', options()), '')
@@ -516,6 +561,13 @@ test('micromark-extension-directive (syntax, leaf)', async function (t) {
   await t.test('should support attributes w/ id shortcut', async function () {
     assert.equal(micromark('::a{#a #b}', options()), '')
   })
+
+  await t.test(
+    'should support non-ascii characters in shortcuts',
+    async function () {
+      assert.equal(micromark('::a{#بلوتو}', options()), '')
+    }
+  )
 
   await t.test(
     'should support most characters in shortcuts',
@@ -751,30 +803,37 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
   })
 
   await t.test(
-    'should not support two colons not followed by an alpha',
+    'should not support two colons not followed by a letter',
     async function () {
       assert.equal(micromark('::', options()), '<p>::</p>')
     }
   )
 
   await t.test(
-    'should not support three colons not followed by an alpha',
+    'should not support three colons not followed by a letter',
     async function () {
       assert.equal(micromark(':::', options()), '<p>:::</p>')
     }
   )
 
   await t.test(
-    'should support three colons followed by an alpha',
+    'should support three colons followed by a letter',
     async function () {
       assert.equal(micromark(':::a', options()), '')
     }
   )
 
   await t.test(
-    'should not support three colons followed by a digit',
+    'should support three colons followed by a digit',
     async function () {
-      assert.equal(micromark(':::9', options()), '<p>:::9</p>')
+      assert.equal(micromark(':::9', options()), '')
+    }
+  )
+
+  await t.test(
+    'should support three colons followed by non-ascii letters',
+    async function () {
+      assert.equal(micromark(':::פּלוטאָ', options()), '')
     }
   )
 
@@ -857,9 +916,19 @@ test('micromark-extension-directive (syntax, container)', async function (t) {
     assert.equal(micromark(':::a{\n}', options()), '<p>:::a{\n}</p>')
   })
 
-  await t.test('should support attributes', async function () {
+  await t.test('should support attributes w/o values', async function () {
     assert.equal(micromark(':::a{a b c}', options()), '')
   })
+
+  await t.test(
+    'should support attributes w/ non-ascii letters',
+    async function () {
+      assert.equal(
+        micromark(':::planet{плутон}', options({'*': h})),
+        '<planet плутон=""></planet>'
+      )
+    }
+  )
 
   await t.test(
     'should not support EOLs around initializers',

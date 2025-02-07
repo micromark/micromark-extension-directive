@@ -6,11 +6,11 @@ import {ok as assert} from 'devlop'
 import {factorySpace} from 'micromark-factory-space'
 import {factoryWhitespace} from 'micromark-factory-whitespace'
 import {
-  asciiAlpha,
-  asciiAlphanumeric,
   markdownLineEnding,
   markdownLineEndingOrSpace,
-  markdownSpace
+  markdownSpace,
+  unicodePunctuation,
+  unicodeWhitespace
 } from 'micromark-util-character'
 import {codes, types} from 'micromark-util-symbol'
 
@@ -77,13 +77,6 @@ export function factoryAttributes(
       return shortcutStart(code)
     }
 
-    if (code === codes.colon || code === codes.underscore || asciiAlpha(code)) {
-      effects.enter(attributeType)
-      effects.enter(attributeNameType)
-      effects.consume(code)
-      return name
-    }
-
     if (disallowEol && markdownSpace(code)) {
       return factorySpace(effects, between, types.whitespace)(code)
     }
@@ -92,7 +85,21 @@ export function factoryAttributes(
       return factoryWhitespace(effects, between)(code)
     }
 
-    return end(code)
+    if (
+      code === codes.eof ||
+      markdownLineEnding(code) ||
+      unicodeWhitespace(code) ||
+      (unicodePunctuation(code) &&
+        code !== codes.dash &&
+        code !== codes.underscore)
+    ) {
+      return end(code)
+    }
+
+    effects.enter(attributeType)
+    effects.enter(attributeNameType)
+    effects.consume(code)
+    return name
   }
 
   /** @type {State} */
@@ -167,27 +174,30 @@ export function factoryAttributes(
   /** @type {State} */
   function name(code) {
     if (
-      code === codes.dash ||
-      code === codes.dot ||
-      code === codes.colon ||
-      code === codes.underscore ||
-      asciiAlphanumeric(code)
+      code === codes.eof ||
+      markdownLineEnding(code) ||
+      unicodeWhitespace(code) ||
+      (unicodePunctuation(code) &&
+        code !== codes.dash &&
+        code !== codes.dot &&
+        code !== codes.colon &&
+        code !== codes.underscore)
     ) {
-      effects.consume(code)
-      return name
+      effects.exit(attributeNameType)
+
+      if (disallowEol && markdownSpace(code)) {
+        return factorySpace(effects, nameAfter, types.whitespace)(code)
+      }
+
+      if (!disallowEol && markdownLineEndingOrSpace(code)) {
+        return factoryWhitespace(effects, nameAfter)(code)
+      }
+
+      return nameAfter(code)
     }
 
-    effects.exit(attributeNameType)
-
-    if (disallowEol && markdownSpace(code)) {
-      return factorySpace(effects, nameAfter, types.whitespace)(code)
-    }
-
-    if (!disallowEol && markdownLineEndingOrSpace(code)) {
-      return factoryWhitespace(effects, nameAfter)(code)
-    }
-
-    return nameAfter(code)
+    effects.consume(code)
+    return name
   }
 
   /** @type {State} */

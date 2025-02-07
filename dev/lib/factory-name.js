@@ -2,7 +2,11 @@
  * @import {Code, Effects, State, TokenizeContext, TokenType} from 'micromark-util-types'
  */
 
-import {asciiAlpha, asciiAlphanumeric} from 'micromark-util-character'
+import {
+  markdownLineEnding,
+  unicodePunctuation,
+  unicodeWhitespace
+} from 'micromark-util-character'
 import {codes} from 'micromark-util-symbol'
 
 /**
@@ -19,29 +23,37 @@ export function factoryName(effects, ok, nok, type) {
 
   /** @type {State} */
   function start(code) {
-    if (asciiAlpha(code)) {
-      effects.enter(type)
-      effects.consume(code)
-      return name
+    if (
+      code === codes.eof ||
+      markdownLineEnding(code) ||
+      unicodePunctuation(code) ||
+      unicodeWhitespace(code)
+    ) {
+      return nok(code)
     }
 
-    return nok(code)
+    effects.enter(type)
+    effects.consume(code)
+    return name
   }
 
   /** @type {State} */
   function name(code) {
     if (
-      code === codes.dash ||
-      code === codes.underscore ||
-      asciiAlphanumeric(code)
+      code === codes.eof ||
+      markdownLineEnding(code) ||
+      unicodeWhitespace(code) ||
+      (unicodePunctuation(code) &&
+        code !== codes.dash &&
+        code !== codes.underscore)
     ) {
-      effects.consume(code)
-      return name
+      effects.exit(type)
+      return self.previous === codes.dash || self.previous === codes.underscore
+        ? nok(code)
+        : ok(code)
     }
 
-    effects.exit(type)
-    return self.previous === codes.dash || self.previous === codes.underscore
-      ? nok(code)
-      : ok(code)
+    effects.consume(code)
+    return name
   }
 }
