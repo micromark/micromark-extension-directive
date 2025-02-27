@@ -1,39 +1,8 @@
 {
-  "name": "micromark-extension-directive",
-  "version": "3.0.2",
-  "description": "micromark extension to support generic directives (`:cite[smith04]`)",
-  "license": "MIT",
-  "keywords": [
-    "micromark",
-    "micromark-extension",
-    "generic",
-    "directive",
-    "container",
-    "extension",
-    "markdown",
-    "unified"
-  ],
-  "repository": "micromark/micromark-extension-directive",
-  "bugs": "https://github.com/micromark/micromark-extension-directive/issues",
-  "funding": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/unified"
-  },
   "author": "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
+  "bugs": "https://github.com/micromark/micromark-extension-directive/issues",
   "contributors": [
     "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)"
-  ],
-  "sideEffects": false,
-  "type": "module",
-  "exports": {
-    "development": "./dev/index.js",
-    "default": "./index.js"
-  },
-  "files": [
-    "dev/",
-    "lib/",
-    "index.d.ts",
-    "index.js"
   ],
   "dependencies": {
     "devlop": "^1.0.0",
@@ -44,6 +13,7 @@
     "micromark-util-types": "^2.0.0",
     "parse-entities": "^4.0.0"
   },
+  "description": "micromark extension to support generic directives (`:cite[smith04]`)",
   "devDependencies": {
     "@types/node": "^22.0.0",
     "c8": "^10.0.0",
@@ -57,16 +27,32 @@
     "typescript": "^5.0.0",
     "xo": "^0.60.0"
   },
-  "scripts": {
-    "prepack": "npm run build && npm run format",
-    "build": "tsc --build --clean && tsc --build && type-coverage && micromark-build",
-    "format": "remark . -qfo && prettier . -w --log-level warn && xo --fix",
-    "test-api-prod": "node --conditions production test/index.js",
-    "test-api-dev": "node --conditions development test/index.js",
-    "test-api": "npm run test-api-dev && npm run test-api-prod",
-    "test-coverage": "c8 --100 --reporter lcov npm run test-api",
-    "test": "npm run build && npm run format && npm run test-coverage"
+  "exports": {
+    "development": "./dev/index.js",
+    "default": "./index.js"
   },
+  "files": [
+    "dev/",
+    "index.d.ts",
+    "index.js",
+    "lib/"
+  ],
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/unified"
+  },
+  "keywords": [
+    "container",
+    "directive",
+    "extension",
+    "generic",
+    "markdown",
+    "micromark-extension",
+    "micromark",
+    "unified"
+  ],
+  "license": "MIT",
+  "name": "micromark-extension-directive",
   "prettier": {
     "bracketSpacing": false,
     "semi": false,
@@ -80,12 +66,23 @@
       "remark-preset-wooorm"
     ]
   },
+  "repository": "micromark/micromark-extension-directive",
+  "scripts": {
+    "build": "tsc --build --clean && tsc --build && type-coverage && micromark-build",
+    "format": "remark --frail --output --quiet -- . && prettier --log-level warn --write -- . && xo --fix",
+    "test-api-prod": "node --conditions production test/index.js",
+    "test-api-dev": "node --conditions development test/index.js",
+    "test-api": "npm run test-api-dev && npm run test-api-prod",
+    "test-coverage": "c8 --100 --reporter lcov -- npm run test-api",
+    "test": "npm run build && npm run format && npm run test-coverage"
+  },
+  "sideEffects": false,
   "typeCoverage": {
     "atLeast": 100,
-    "detail": true,
-    "ignoreCatch": true,
     "strict": true
   },
+  "type": "module",
+  "version": "3.0.2",
   "xo": {
     "overrides": [
       {
