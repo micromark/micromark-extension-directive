@@ -192,6 +192,29 @@ test('micromark-extension-directive (syntax, text)', async function (t) {
   })
 
   await t.test(
+    'should support initial and final whitespace in and around a label',
+    async function () {
+      /** @type {string | undefined} */
+      let label
+
+      assert.equal(
+        micromark(
+          'a :x[ b ] c',
+          options({
+            x(d) {
+              label = d.label
+              return true
+            }
+          })
+        ),
+        '<p>a  c</p>'
+      )
+
+      assert.equal(label, ' b ')
+    }
+  )
+
+  await t.test(
     'should support markdown in a label (hard break)',
     async function () {
       assert.equal(

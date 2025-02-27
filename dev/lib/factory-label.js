@@ -67,6 +67,7 @@ export function factoryLabel(
     }
 
     const token = effects.enter(types.chunkText, {
+      _contentTypeTextTrailing: true,
       contentType: constants.contentTypeText,
       previous
     })
