@@ -69,14 +69,14 @@ npm install micromark-extension-directive
 In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import {directive, directiveHtml} from 'https://esm.sh/micromark-extension-directive@3'
+import {directive, directiveHtml} from 'https://esm.sh/micromark-extension-directive@4'
 ```
 
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import {directive, directiveHtml} from 'https://esm.sh/micromark-extension-directive@3?bundle'
+  import {directive, directiveHtml} from 'https://esm.sh/micromark-extension-directive@4?bundle'
 </script>
 ```
 
@@ -343,10 +343,10 @@ versions of Node.js.
 When we cut a new major release,
 we drop support for unmaintained versions of Node.
 This means we try to keep the current release line,
-`micromark-extension-directive@3`,
+`micromark-extension-directive@4`,
 compatible with Node.js 16.
 
-This package works with `micromark` version `3` and later.
+This package works with `micromark` version `4` and later.
 
 ## Security
 
