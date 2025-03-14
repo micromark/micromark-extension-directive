@@ -269,8 +269,7 @@ He dies.
 :::
 
 The `name` part is required.
-The first character must be a letter,
-other characters can be alphanumerical, `-`, and `_`.
+The characters can be alphanumerical, `-`, and `_`.
 `-` or `_` cannot end a name.
 
 The `[label]` part is optional (`:x` and `:x[]` are equivalent)†.
