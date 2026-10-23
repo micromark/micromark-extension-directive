@@ -23,6 +23,12 @@ export function directiveHtml(options) {
   return {
     enter: {
       directiveContainer() {
+        const tightStack = this.getData('tightStack')
+        // Like block quotes, container directives hold loose content, also in
+        // tight list items.
+        // With an empty stack, content is already loose; it is kept empty as
+        // the compiler uses its length when closing fenced code.
+        if (tightStack.length > 0) tightStack.push(false)
         enter.call(this, 'containerDirective')
       },
       directiveContainerAttributes: enterAttributes,
@@ -44,7 +50,7 @@ export function directiveHtml(options) {
       directiveTextLabel: enterLabel
     },
     exit: {
-      directiveContainer: exit,
+      directiveContainer: exitContainer,
       directiveContainerAttributeClassValue: exitAttributeClassValue,
       directiveContainerAttributeIdValue: exitAttributeIdValue,
       directiveContainerAttributeName: exitAttributeName,
@@ -217,6 +223,16 @@ export function directiveHtml(options) {
     const stack = this.getData('directiveStack')
     assert(stack, 'expected directive stack')
     stack[stack.length - 1].content = data
+  }
+
+  /**
+   * @this {CompileContext}
+   * @type {MicromarkHandle}
+   */
+  function exitContainer(token) {
+    const tightStack = this.getData('tightStack')
+    if (tightStack.length > 0) tightStack.pop()
+    exit.call(this, token)
   }
 
   /**

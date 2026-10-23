@@ -40,7 +40,7 @@ function tokenizeDirectiveContainer(effects, ok, nok) {
   /** @type {State} */
   function start(code) {
     assert(code === codes.colon, 'expected `:`')
-    effects.enter('directiveContainer')
+    effects.enter('directiveContainer')._container = true
     effects.enter('directiveContainerFence')
     effects.enter('directiveContainerSequence')
     return sequenceOpen(code)

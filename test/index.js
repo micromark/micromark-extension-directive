@@ -1848,6 +1848,59 @@ test('content', async function (t) {
       )
     }
   )
+
+  await t.test(
+    'should support paragraphs in container directives in tight lists',
+    async function () {
+      assert.equal(
+        micromark('* :::div\n  a\n  :::\n* b', options({'*': h})),
+        '<ul>\n<li><div>\n<p>a</p>\n</div>\n</li>\n<li>b</li>\n</ul>'
+      )
+    }
+  )
+
+  await t.test(
+    'should support paragraphs in nested container directives in tight lists',
+    async function () {
+      assert.equal(
+        micromark(
+          '* ::::div\n  :::div\n  a\n  :::\n  * b\n  * c\n  ::::\n* d',
+          options({'*': h})
+        ),
+        '<ul>\n<li><div>\n<div>\n<p>a</p>\n</div>\n<ul>\n<li>b</li>\n<li>c</li>\n</ul>\n</div>\n</li>\n<li>d</li>\n</ul>'
+      )
+    }
+  )
+
+  await t.test(
+    'should not make a list loose for blank lines in container directives',
+    async function () {
+      assert.equal(
+        micromark('* a\n* :::div\n  b\n\n  c\n  :::\n* d', options({'*': h})),
+        '<ul>\n<li>a</li>\n<li><div>\n<p>b</p>\n<p>c</p>\n</div>\n</li>\n<li>d</li>\n</ul>'
+      )
+    }
+  )
+
+  await t.test(
+    'should support unclosed fenced code in container directives',
+    async function () {
+      assert.equal(
+        micromark(':::div\n```\na\n:::', options({'*': h})),
+        '<div>\n<pre><code>a\n</code></pre>\n</div>'
+      )
+    }
+  )
+
+  await t.test(
+    'should make a list loose for blank lines after container directives',
+    async function () {
+      assert.equal(
+        micromark('* :::div\n  a\n  :::\n\n  b\n* c', options({'*': h})),
+        '<ul>\n<li><div>\n<p>a</p>\n</div>\n<p>b</p>\n</li>\n<li>\n<p>c</p>\n</li>\n</ul>'
+      )
+    }
+  )
 })
 
 /**
